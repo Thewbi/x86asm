@@ -57,7 +57,10 @@ BIN_NUMERIC : '%' [0-1]+ ;
 DEC_NUMERIC : '-'? [0-9]+ ;
 HEX_NUMERIC : '$' [a-fA-F0-9]+ ;
 
+BYTE : 'B' 'Y' 'T' 'E' ;
+
 COLON : ':' ;
+COMMA : ',' ;
 
 // DIGITS_RADIX_OVERRIDE : '-'? [0-9]+ ;
 
@@ -74,6 +77,8 @@ DOT_686P    : '.''6''8''6''P' ;
 DOT_387     : '.''3''8''7' ;
 
 DOT_STACK   : DOT 's' 't' 'a' 'c' 'k' ;
+
+EQU : 'E' 'Q' 'U' ;
 
 LPAREN : '(' ;
 RPAREN : ')' ;
@@ -103,7 +108,13 @@ IDENTIFIER : ( ('@')? DOT? ('_')* [_0-9a-zA-Z]* [a-zA-Z]+ ) ( DOT? ('_')* [_0-9a
 
 WS : [ \t\r]+ -> skip ;
 
+STRING_LITERAL : UNTERMINATED_STRING_LITERAL '"' ;
+
+UNTERMINATED_STRING_LITERAL : '"' (~["\\\r\n] | '\\' (. | EOF))* ;
+
 NEWLINE : [\n] ;
+
+
 
 
 

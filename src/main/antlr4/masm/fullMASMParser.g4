@@ -29,9 +29,11 @@ addOp :
 // 
 // altId
 //   id
-// 
-// alpha
+ 
+alpha :
 //   Ein beliebiger Groß- oder Kleinbuchstabe (A-Z) oder eines der folgenden vier Zeichen: @ _ $ ?
+    IDENTIFIER
+    ;
  
 //arbitraryText
 //    charList
@@ -179,23 +181,30 @@ constExpr :
 //   | ! expr
 //   | expr == expr
 //   | expr != expr
-// 
-// dataDecl
+ 
+dataDecl :
 //   DB | DW | DD | DF | DQ | DT | dataType | typeId
-// 
-// dataDir
+    dataType
+    ;
+ 
+dataDir :
 //   id ⟦ ⟧ dataItem ;;
-// 
-// dataItem
-//   dataDecl scalarInstList
+    id dataItem
+    ;
+ 
+dataItem :
+    dataDecl scalarInstList
 //   | structTag structInstList
 //   | typeId structInstList
 //   | unionTag structInstList
 //   | recordTag recordInstList
-// 
-// dataType
+    ;
+ 
+dataType :
 //   BYTE | SBYTE | WORD | SWORD | DWORD | SDWORD | FWORD | QWORD | SQWORD | TBYTE | OWORD | REAL4 | REAL8 | REAL10 | MMWORD | XMMWORD | YMMWORD
-// 
+    BYTE
+    ;
+
 // decdigit
 //   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 // 
@@ -338,13 +347,16 @@ e11 :
 // 
 // endsDir
 //   id ENDS ;;
-// 
-// equDir
-//   textMacroId EQU equType ;;
-// 
-// equType
-//   immExpr | textLiteral
-// 
+ 
+equDir :
+    textMacroId EQU equType // ;;
+    ;
+ 
+equType :
+    immExpr 
+    //| textLiteral
+    ;
+
 // errorDir
 //   errorOpt ;;
 // 
@@ -454,10 +466,11 @@ generalDir :
 //   | groupDir | assumeDir
 //   | structDir | recordDir | typedefDir
 //   | externDir | publicDir | commDir | protoTypeDir
-//   | equDir | =Dir | textDir
+//   | 
+    equDir 
+// | =Dir | textDir
 //   | contextDir | optionDir 
-//    | 
-    processorDir
+    | processorDir
 //   | radixDir
     | titleDir // | pageDir | listDir
 //   | crefDir | echoDir
@@ -482,13 +495,14 @@ generalDir :
 // hexdigit
 //   a | b | c | d | e | f
 //   | A | B | C | D | E | F
-// 
-// id
-//   alpha
+ 
+id :
+    alpha
 //   | id alpha
 //   | id decdigit
 //   Die maximale Länge beträgt 247 Zeichen.
-// 
+    ;
+
 // idList
 //   id | idList , id
 // 
@@ -512,9 +526,10 @@ generalDir :
 //   | IFIDNI textItem , textItem
 //   | IF1
 //   | IF2
-// 
-// immExpr
-//   expr
+ 
+immExpr :
+    expr
+    ;
  
 includeDir :
     INCLUDE fileSpec //;;
@@ -522,14 +537,15 @@ includeDir :
  
 // includeLibDir
 //   INCLUDELIB fileSpec ;;
-// 
-// initValue
-//   immExpr
-//   | string
+ 
+initValue :
+      immExpr
+    | string     
 //   | ?
 //   | constExpr DUP ( scalarInstList )
 //   | floatNumber
 //   | bcdConst
+    ;
 // 
 // inSegDir
 //   labelDef ⟦ ⟧inSegmentDir
@@ -539,16 +555,16 @@ includeDir :
 
 inSegmentDir : 
 //   instruction
-//   | dataDir
+//   | 
+    dataDir
 //   | controlDir
 //   | startupDir
 //   | exitDir
 //   | offsetDir
 //   | labelDir
-//   | procDirlocalDirList ⟦ ⟧ ⟦ inSegDirList ⟧endpDir
+//   | procDirlocalDirList ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
 //   | invokeDir
-//    | 
-    generalDir
+    | generalDir
     ;
 
 // instrPrefix
@@ -761,7 +777,7 @@ mulOp :
 //   | SETIF2 : bool
 // 
 // optionList
-//   optionItem | optionList, ;; ⟦ ⟧optionItem
+//   optionItem | optionList, ;; ⟦ ⟧ optionItem
 // 
 // optText
 //   , textItem
@@ -793,7 +809,7 @@ orOp :
 //   id
 // 
 // parmList
-//   parm | parmList, ;; ⟦ ⟧parm
+//   parm | parmList, ;; ⟦ ⟧ parm
 // 
 // parmType
 //   REQ | = textLiteral | VARARG
@@ -923,10 +939,12 @@ relOp :
 // 
 // repeatDir
 //   REPEAT | REPT
-// 
-// scalarInstList
-//   initValue
-//   | scalarInstList, ;; ⟦ ⟧initValue
+
+scalarInstList :
+      initValue
+    | scalarInstList COMMA initValue // ;; ⟦ ⟧ initValue
+    ;
+
 // 
 // segAlign
 //   BYTE | WORD | DWORD | PARA | PAGE
@@ -1024,9 +1042,11 @@ shiftOp :
 // stext
 //   stringChar | stext stringChar
 // 
-// string
-//   quotestext ⟦ ⟧quote
-// 
+string :
+    //quotestext ⟦ ⟧ quote
+    STRING_LITERAL
+    ;
+ 
 // stringChar
 //   quotequote | Ein beliebiges Zeichen mit Ausnahme von Anführungszeichen.
 // 
@@ -1089,10 +1109,11 @@ textLiteral :
 //   | SIZESTR textItem
 //   | SUBSTRtextItem , textStart , textLen ⟦ ⟧
 //   | INSTRtextStart , ⟦ ⟧ textItem , textItem
-// 
-// textMacroId
-//   id
-// 
+ 
+textMacroId :
+    id
+    ;
+ 
 // textStart
 //   constExpr
 
