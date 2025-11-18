@@ -9,8 +9,8 @@ options {
 }
 
 asm_file :
-    ( NEWLINE | inSegmentDir NEWLINE )+
-    ( NEWLINE | inSegmentDir )
+    ( NEWLINE | ( inSegmentDir | simpleSegDir ) NEWLINE )*
+    ( NEWLINE | ( inSegmentDir | simpleSegDir ) )
 	;
 
 // ;; :
@@ -19,10 +19,11 @@ asm_file :
  
 // =Dir
 //   id = immExpr ;;
-// 
-// addOp
-//   + | -
-// 
+ 
+addOp :
+    PLUS | MINUS
+    ;
+ 
 // aExpr
 //   term | aExpr && term
 // 
@@ -123,13 +124,16 @@ asm_file :
 // 
 // commType
 //   type | constExpr
-// 
-// constant
-//   digitsradixOverride ⟦ ⟧
-// 
-// constExpr
-//   expr
-// 
+ 
+constant :
+    // DIGITS_RADIX_OVERRIDE ⟦ ⟧
+    DEC_NUMERIC
+    ;
+ 
+constExpr :
+    expr
+    ;
+
 // contextDir
 //   PUSHCONTEXT contextItemList ;;
 //   | POPCONTEXT contextItemList ;;
@@ -217,52 +221,73 @@ delimiter :
 // 
 // distance
 //   nearfar | NEAR16 | NEAR32 | FAR16 | FAR32
-// 
-// e01
-//   e01 orOp e02 | e02
-// 
-// e02
-//   e02 AND e03 | e03
-// 
-// e03
-//   NOT e04 | e04
-// 
-// e04
-//   e04 relOp e05 | e05
-// 
-// e05
-//   e05 addOp e06 | e06
-// 
-// e06
-//   e06 mulOp e07 | e06 shiftOp e07 | e07
-// 
-// e07
-//   e07 addOp e08 | e08
-// 
-// e08
+
+e01 :
+      e01 orOp e02 
+    | e02
+    ;
+
+e02 :
+      e02 AND e03 
+    | e03
+    ;
+
+e03 :
+      NOT e04 
+    | e04
+    ;
+
+e04 :
+      e04 relOp e05 
+    | e05
+    ;
+
+e05 :
+      e05 addOp e06 
+    | e06
+    ;
+
+e06 :
+      e06 mulOp e07 
+    | e06 shiftOp e07 
+    | e07
+    ;
+
+e07 :
+      e07 addOp e08 
+    | e08
+    ;
+ 
+e08 :
 //   HIGH e09
 //   | LOW e09
 //   | HIGHWORD e09
 //   | LOWWORD e09
-//   | e09
-// 
-// e09
+//    | 
+    e09
+    ;
+ 
+e09 :
 //   OFFSET e10
 //   | SEG e10
 //   | LROFFSET e10
 //   | TYPE e10
 //   | THIS e10
 //   | e09 PTR e10
-//   | e09 : e10
-//   | e10
-// 
-// e10
-//   e10 . e11
-//   | e10expr ⟦ ⟧
-//   | e11
-// 
-// e11
-//   ( expr )
+//    | 
+    e09 COLON e10
+    | e10
+    ;
+ 
+e10 :
+    //  e10 DOT e11
+    //| e10 expr // ⟦ ⟧
+    //| 
+    e11
+    ;
+
+e11 :
+    LPAREN expr RPAREN
 //   | expr ⟦ ⟧
 //   | WIDTH id
 //   | MASK id
@@ -272,7 +297,7 @@ delimiter :
 //   | LENGTHOF id
 //   | recordConst
 //   | string
-//   | constant
+    | constant
 //   | type
 //   | id
 //   | $
@@ -280,7 +305,8 @@ delimiter :
 //   | register
 //   | ST
 //   | ST ( expr )
-// 
+    ;
+ 
 // echoDir
 //   ECHO arbitraryText ;;
 //   %OUT arbitraryText ;;
@@ -345,13 +371,15 @@ delimiter :
 // 
 // exponent
 //   Esign ⟦ ⟧decNumber
-// 
-// expr
+ 
+expr :
 //   SHORT e05
 //   | .TYPE e01
 //   | OPATTR e01
-//   | e01
-// 
+//   | 
+    e01
+    ;
+
 // exprList
 //   expr | exprList , expr
 // 
@@ -427,7 +455,9 @@ generalDir :
 //   | structDir | recordDir | typedefDir
 //   | externDir | publicDir | commDir | protoTypeDir
 //   | equDir | =Dir | textDir
-//   | contextDir | optionDir | processorDir
+//   | contextDir | optionDir 
+//    | 
+    processorDir
 //   | radixDir
     | titleDir // | pageDir | listDir
 //   | crefDir | echoDir
@@ -676,10 +706,11 @@ inSegmentDir :
 // 
 // module
 //   directiveList ⟦ ⟧endDir
-// 
-// mulOp
-//   * | / | MOD
-// 
+ 
+mulOp :
+    ASTERISK | SLASH | MOD
+    ;
+ 
 // nameDir
 //   NAME id ;;
 // 
@@ -734,10 +765,11 @@ inSegmentDir :
 // 
 // optText
 //   , textItem
-// 
-// orOp
-//   OR | XOR
-// 
+ 
+orOp :
+    OR | XOR
+    ;
+
 // oVisibility
 //   PUBLIC | PRIVATE | EXPORT
 // 
@@ -775,15 +807,24 @@ inSegmentDir :
 // procDir
 //   procIdPROC pOptions ⟦ ⟧ ⟦ < macroArgList > ⟧
 //   usesRegs ⟦ ⟧ ⟦ procParmList ⟧
-// 
-// processor
-//   | .386 | .386p | .486 | .486P
-//   | .586 | .586P | .686 | .686P | .387
-// 
-// processorDir
-//   processor ;;
-//   | coprocessor ;;
-// 
+ 
+processor :
+      DOT_386 
+    | DOT_386P
+    | DOT_486 
+    | DOT_486P
+    | DOT_586 
+    | DOT_586P
+    | DOT_686 
+    | DOT_686P
+    | DOT_387 
+    ;
+ 
+processorDir :
+    processor // ;;
+//    | coprocessor ;;
+    ;
+ 
 // procId
 //   id
 // 
@@ -871,10 +912,11 @@ inSegmentDir :
 // 
 // regList
 //   register | regList register
-// 
-// relOp
-//   EQ | NE | LT | LE | GT | GE
-// 
+ 
+relOp :
+    EQ | NE | LT | LE | GT | GE
+    ;
+
 // repeatBlock
 //   .REPEAT ;;
 //   blockStatements ;;untilDir ;;
@@ -891,16 +933,18 @@ inSegmentDir :
 // 
 // segAttrib
 //   PUBLIC | STACK | COMMON | MEMORY | AT constExpr | PRIVATE
-// 
-// segDir
-//   .CODEsegId ⟦ ⟧
+ 
+    segDir :
+//   .CODE segId ⟦ ⟧
 //   | .DATA
 //   | .DATA?
 //   | .CONST
-//   | .FARDATAsegId ⟦ ⟧
-//   | .FARDATA?segId ⟦ ⟧
-//   | .STACKconstExpr ⟦ ⟧
-// 
+//   | .FARDATA segId ⟦ ⟧
+//   | .FARDATA? segId ⟦ ⟧
+//   | 
+    DOT_STACK constExpr // ⟦ ⟧
+    ;
+ 
 // segId
 //   id
 // 
@@ -935,10 +979,11 @@ inSegmentDir :
 // 
 // segSize
 //   USE16 | USE32 | FLAT
-// 
-// shiftOp
-//   SHR | SHL
-// 
+ 
+shiftOp :
+    SHR | SHL
+    ;
+ 
 // sign
 //   + | -
 // 
@@ -950,10 +995,11 @@ inSegmentDir :
 // 
 // simpleExpr
 //   ( cExpr ) | primary
-// 
-// simpleSegDir
-//   segDir ;;
-// 
+ 
+ simpleSegDir :
+    segDir //;;
+    ;
+ 
 // sizeArg
 //   id | type | e10
 // 
@@ -1051,7 +1097,7 @@ textLiteral :
 //   constExpr
 
 titleDir :
-    titleType // arbitraryText ;;
+    titleType ( LPAREN | RPAREN | IDENTIFIER )* // arbitraryText ;;
     ;
  
 titleType :
