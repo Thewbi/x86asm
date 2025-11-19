@@ -8,10 +8,20 @@ options {
     caseInsensitive = true;
 }
 
+//asm_file :
+//    ( 
+//          NEWLINE 
+//        | ( inSegmentDir | simpleSegDir ) NEWLINE 
+//    )*
+//    ( 
+//          NEWLINE 
+//        | ( inSegmentDir | simpleSegDir ) 
+//    )
+//	;
+
 asm_file :
-    ( NEWLINE | ( inSegmentDir | simpleSegDir ) NEWLINE )*
-    ( NEWLINE | ( inSegmentDir | simpleSegDir ) )
-	;
+    ( inSegmentDir | simpleSegDir | module )+ EOF
+    ;
 
 // ;; :
 //    endOfLine | comment
@@ -221,12 +231,16 @@ delimiter :
 //   decdigit
 //   | digits decdigit
 //   | digits hexdigit
-// 
-// directive
-//   generalDir | segmentDef
-// 
-// directiveList
-//   directive | directiveList directive
+ 
+directive :
+      generalDir 
+    //| segmentDef
+    ;
+ 
+directiveList :
+      directive 
+    | directiveList directive
+    ;
  
 distance :
     nearfar 
@@ -341,9 +355,10 @@ e11 :
 //   | ELSEIFIDNI textItem , textItem
 //   | ELSEIF1
 //   | ELSEIF2
-// 
-// endDir
-//   ENDimmExpr ⟦ ⟧;;
+
+endDir :
+    END immExpr // ⟦ ⟧;;
+    ;
  
 endpDir :
     procId ENDP //;;
@@ -568,8 +583,9 @@ initValue :
     ;
  
 inSegDir :
-      NEWLINE
-    | labelDef? inSegmentDir? NEWLINE
+      labelDef
+    | inSegmentDir
+    | labelDef inSegmentDir
     ;
  
 inSegDirList :
@@ -585,7 +601,7 @@ inSegmentDir :
 //   | exitDir
 //   | offsetDir
 //   | labelDir
-    | procDir localDirList? NEWLINE inSegDirList? endpDir // ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
+    | procDir localDirList? inSegDirList? endpDir // ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
 //   | invokeDir
     | generalDir
     ;
@@ -756,6 +772,7 @@ mnemonic :
     | INC
     | JE
     | JG
+    | JGE
     | JL
     | JMP
     | JNE
@@ -782,8 +799,9 @@ modelOptlist :
     | modelOptlist COMMA modelOpt
     ;
 
-// module
-//   directiveList ⟦ ⟧ endDir
+module :
+    directiveList? endDir
+    ;
  
 mulOp :
     ASTERISK | SLASH | MOD
@@ -1041,7 +1059,7 @@ scalarInstList :
  
 segDir :
     DOT_CODE segId? // ⟦ ⟧
-//   | .DATA
+    | DOT_DATA
 //   | .DATA?
 //   | .CONST
 //   | .FARDATA segId? // ⟦ ⟧
@@ -1221,9 +1239,8 @@ type :
 //   | unionTag
 //   | recordTag
 //   | distance
-//   | dataType
-//   | 
-    typeId
+    dataType
+    | typeId
 ;
 
 // typedefDir

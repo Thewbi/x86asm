@@ -1,7 +1,10 @@
 lexer grammar fullMASMLexer;
 
+NEWLINE : ( '\r' | '\n' | '\r\n' ) -> channel(HIDDEN) 
+    ;
+
 LINE_COMMENT : 
-    ';' ~[\r\n]* -> channel(HIDDEN)
+    ';' (~[\r\n])* -> channel(HIDDEN)
     ;
 
 COMMENT :
@@ -82,6 +85,7 @@ INC : I N C ;
 
 JE : J E ;
 JG : J G ;
+JGE : J G E ;
 JL : J L ;
 JMP : J M P ;
 JNE : J N E ;
@@ -143,6 +147,7 @@ DOT_686P    : '.''6''8''6''P' ;
 DOT_387     : '.''3''8''7' ;
 
 DOT_CODE    : DOT 'c' 'o' 'd' 'e' ;
+DOT_DATA    : DOT 'd' 'a' 't' 'a' ;
 DOT_MODEL   : DOT 'm' 'o' 'd' 'e' 'l' ;
 DOT_STACK   : DOT 's' 't' 'a' 'c' 'k' ;
 
@@ -166,6 +171,7 @@ DUP : 'D''U''P' ;
 DWORD : 'D''W''O''R''D' ;
 
 ENDP : 'E''N''D''P' ;
+END : 'E''N''D' ;
 EQU : 'E' 'Q' 'U' ;
 
 FAR : 'F''A''R' ;
@@ -216,8 +222,10 @@ SDWORD : 'S''D''W''O''R''D' ;
 SLASH : '/' ;
 SHL : 'S' 'H' 'L' ;
 SHR : 'S' 'H' 'R' ;
-SUBTITLE : S U B T I T L E -> pushMode(TITLEMODE) ;
-SUBTTL : S U B T T L -> pushMode(TITLEMODE) ;
+//SUBTITLE : S U B T I T L E -> pushMode(TITLEMODE) ;
+SUBTITLE : S U B T I T L E ;
+//SUBTTL : S U B T T L -> pushMode(TITLEMODE) ;
+SUBTTL : S U B T T L ;
 SWORD : 'S''W''O''R''D' ;
 SQWORD : 'S''Q''W''O''R''D' ;
 SINGLE_QUOTE : '\'';
@@ -255,7 +263,7 @@ UNTERMINATED_SINGLE_QUOTE_LITERAL : SINGLE_QUOTE (~['\\\r\n] | '\\' (. | EOF))* 
 STRING_LITERAL : UNTERMINATED_STRING_LITERAL '"' ;
 UNTERMINATED_STRING_LITERAL : '"' (~["\\\r\n] | '\\' (. | EOF))* ;
 
-NEWLINE : [\n] ;
+
 
 
 
