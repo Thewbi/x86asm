@@ -296,9 +296,9 @@ e09 :
     OFFSET e10
 //   | SEG e10
 //   | LROFFSET e10
-//   | TYPE e10
+//    | TYPE e10
 //   | THIS e10
-//   | e09 PTR e10
+    | e09 PTR e10
 //     
     | e09 COLON e10
     | e10
@@ -306,9 +306,9 @@ e09 :
  
 e10 :
     //  e10 DOT e11
-    //| e10 expr // ⟦ ⟧
     //| 
-    e11
+    e10 expr // ⟦ ⟧
+    | e11
     ;
 
 e11 :
@@ -324,7 +324,7 @@ e11 :
 //   | recordConst
     | string
     | constant
-//   | type
+    | type
     | id
 //   | $
 //   | segmentRegister
