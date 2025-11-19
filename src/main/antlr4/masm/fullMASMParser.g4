@@ -39,9 +39,10 @@ alpha :
 //    charList
 //    ;
  
-// asmInstruction
-//   mnemonicexprList ⟦ ⟧
-// 
+asmInstruction :
+    mnemonic exprList? // ⟦ ⟧
+    ;
+
 // assumeDir
 //   ASSUME assumeList ;;
 //   | ASSUME NOTHING ;;
@@ -201,8 +202,7 @@ dataItem :
     ;
  
 dataType :
-//   BYTE | SBYTE | WORD | SWORD | DWORD | SDWORD | FWORD | QWORD | SQWORD | TBYTE | OWORD | REAL4 | REAL8 | REAL10 | MMWORD | XMMWORD | YMMWORD
-    BYTE
+    BYTE | SBYTE | WORD | SWORD | DWORD | SDWORD | FWORD | QWORD | SQWORD | TBYTE | OWORD | REAL4 | REAL8 | REAL10 | MMWORD | XMMWORD | YMMWORD
     ;
 
 // decdigit
@@ -227,9 +227,11 @@ delimiter :
 // 
 // directiveList
 //   directive | directiveList directive
-// 
-// distance
-//   nearfar | NEAR16 | NEAR32 | FAR16 | FAR32
+ 
+distance :
+    nearfar 
+    // | NEAR16 | NEAR32 | FAR16 | FAR32
+    ;
 
 e01 :
       e01 orOp e02 
@@ -341,10 +343,11 @@ e11 :
 // 
 // endDir
 //   ENDimmExpr ⟦ ⟧;;
-// 
-// endpDir
-//   procId ENDP ;;
-// 
+ 
+endpDir :
+    procId ENDP //;;
+    ;
+ 
 // endsDir
 //   id ENDS ;;
  
@@ -392,9 +395,11 @@ expr :
     e01
     ;
 
-// exprList
-//   expr | exprList , expr
-// 
+exprList :
+      expr 
+    | exprList COMMA expr
+    ;
+ 
 // externDef
 //   langType ⟦ ⟧ id ⟦ ( altId ) ⟧ : externType
 // 
@@ -501,6 +506,7 @@ id :
 //   | id alpha
 //   | id decdigit
 //   Die maximale Länge beträgt 247 Zeichen.
+//    | IDENTIFIER
     ;
 
 // idList
@@ -540,39 +546,46 @@ includeDir :
  
 initValue :
       immExpr
-    | string     
-//   | ?
-//   | constExpr DUP ( scalarInstList )
+    | string
+    | QUESTION_MARK
+    | constExpr DUP LPAREN scalarInstList RPAREN
 //   | floatNumber
 //   | bcdConst
     ;
-// 
-// inSegDir
-//   labelDef ⟦ ⟧inSegmentDir
-// 
-// inSegDirList
-//   inSegDir | inSegDirList inSegDir
+ 
+inSegDir :
+    labelDef? inSegmentDir
+    ;
+ 
+inSegDirList :
+      inSegDir NEWLINE
+    | inSegDirList NEWLINE inSegDir
+    ;
 
 inSegmentDir : 
-//   instruction
-//   | 
-    dataDir
+    instruction
+    | dataDir
 //   | controlDir
 //   | startupDir
 //   | exitDir
 //   | offsetDir
 //   | labelDir
-//   | procDirlocalDirList ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
+
+//    | procDir localDirList? inSegDirList? endpDir // ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
+    | procDir NEWLINE inSegDirList? endpDir
+
 //   | invokeDir
     | generalDir
     ;
 
-// instrPrefix
-//   REP | REPE | REPZ | REPNE | REPNZ | LOCK
-// 
-// instruction
-//   instrPrefix ⟦ ⟧asmInstruction
-// 
+instrPrefix :
+    REP | REPE | REPZ | REPNE | REPNZ | LOCK
+    ;
+ 
+instruction :
+    instrPrefix? asmInstruction
+    ;
+ 
 // invokeArg
 //   register :: register
 //   | expr
@@ -589,10 +602,13 @@ inSegmentDir :
 // 
 // keywordList
 //   keyword | keyword keywordList
-// 
-// labelDef
-//   id : | id :: | @@:
-// 
+ 
+labelDef :
+      id COLON 
+    | id COLON COLON 
+    | AT_SIGN AT_SIGN COLON
+    ;
+ 
 // labelDir
 //   id LABEL qualifiedType ;;
 // 
@@ -618,27 +634,34 @@ inSegmentDir :
 // 
 // localDef
 //   LOCAL idList ;;
-// 
-// localDir
-//   LOCAL parmList ;;
-// 
-// localDirList
-//   localDir | localDirList localDir
-// 
+ 
+localDir :
+    LOCAL parmList //;;
+    ;
+ 
+localDirList :
+      localDir 
+    | localDirList localDir
+    ;
+ 
 // localList
 //   localDef | localList localDef
-// 
-// macroArg
+
+macroArg :
 //   % constExpr
 //   | % textMacroId
 //   | % macroFuncId ( macroArgList )
-//   | string
+//   | 
+    string
 //   | arbitraryText
 //   | < arbitraryText >
-// 
-// macroArgList
-//   macroArg | macroArgList , macroArg
-// 
+    ;
+
+macroArgList :
+      macroArg 
+    | macroArgList COMMA macroArg
+    ;
+ 
 // macroBody
 //   localList ⟦ ⟧macroStmtList
 // 
@@ -707,10 +730,12 @@ inSegmentDir :
 // 
 // memOption
 //   TINY | SMALL | MEDIUM | COMPACT | LARGE | HUGE | FLAT
-// 
-// mnemonic
-//   Anweisungsname.
-// 
+ 
+mnemonic :
+    // Anweisungsname.
+    EXIT
+    ;
+ 
 // modelDir
 //   .MODELmemOption , modelOptlist⟦ ⟧;;
 // 
@@ -729,10 +754,11 @@ mulOp :
  
 // nameDir
 //   NAME id ;;
-// 
-// nearfar
-//   NEAR | FAR
-// 
+ 
+nearfar :
+    NEAR | FAR
+    ;
+
 // nestedStruct
 //   structHdrid ⟦ ⟧;;
 //   structBody
@@ -800,29 +826,39 @@ orOp :
 // 
 // pageWidth
 //   constExpr
-// 
-// parm
-//   parmId: qualifiedType ⟦ ⟧
-//   | parmIdconstExpr ⟦ ⟧ ⟦ : qualifiedType ⟧
-// 
-// parmId
-//   id
-// 
-// parmList
-//   parm | parmList, ;; ⟦ ⟧ parm
-// 
-// parmType
-//   REQ | = textLiteral | VARARG
-// 
-// pOptions
-//   distance ⟦ ⟧ ⟦ langType ⟧ ⟦ oVisibility ⟧
-// 
+ 
+parm :
+    parmId COLON qualifiedType? // ⟦ ⟧
+    | parmId constExpr ( COLON qualifiedType )? // ⟦ ⟧ ⟦ : qualifiedType ⟧
+    ;
+ 
+parmId :
+    id
+    ;
+ 
+parmList :
+    parm 
+    | parmList COMMA parm // ;; ⟦ ⟧ parm
+    ;
+ 
+parmType :
+    REQ 
+    | EQUALS textLiteral 
+    | VARARG
+    ;
+ 
+pOptions :
+    //distance ⟦ ⟧ ⟦ langType ⟧ ⟦ oVisibility ⟧
+    distance
+    ;
+ 
 // primary
 //   expr binaryOp expr | flagName | expr
-// 
-// procDir
-//   procIdPROC pOptions ⟦ ⟧ ⟦ < macroArgList > ⟧
+ 
+procDir :
+    procId PROC pOptions? macroArgList? // ⟦ ⟧ ⟦ < macroArgList > ⟧
 //   usesRegs ⟦ ⟧ ⟦ procParmList ⟧
+    ;
  
 processor :
       DOT_386 
@@ -841,9 +877,10 @@ processorDir :
 //    | coprocessor ;;
     ;
  
-// procId
-//   id
-// 
+procId :
+    id
+    ;
+ 
 // procItem
 //   instrPrefix | dataDir | labelDir | offsetDir | generalDir
 // 
@@ -880,11 +917,13 @@ processorDir :
 // 
 // purgeDir
 //   PURGE macroIdList
-// 
-// qualifiedType
-//   type
-//   | distance ⟦ ⟧ PTR ⟦ qualifiedType ⟧
-// 
+ 
+qualifiedType :
+    type
+    //| distance ⟦ ⟧ PTR ⟦ qualifiedType ⟧
+    | distance? PTR qualifiedType?
+    ;
+ 
 // qualifier
 //   qualifiedType | PROTO protoSpec
 // 
@@ -952,20 +991,21 @@ scalarInstList :
 // segAttrib
 //   PUBLIC | STACK | COMMON | MEMORY | AT constExpr | PRIVATE
  
-    segDir :
-//   .CODE segId ⟦ ⟧
+segDir :
+    DOT_CODE segId? // ⟦ ⟧
 //   | .DATA
 //   | .DATA?
 //   | .CONST
-//   | .FARDATA segId ⟦ ⟧
-//   | .FARDATA? segId ⟦ ⟧
+//   | .FARDATA segId? // ⟦ ⟧
+//   | .FARDATA? segId? // ⟦ ⟧
 //   | 
-    DOT_STACK constExpr // ⟦ ⟧
+    | DOT_STACK constExpr? // ⟦ ⟧
     ;
  
-// segId
-//   id
-// 
+segId :
+    id
+    ;
+ 
 // segIdList
 //   segId
 //   | segIdList , segId
@@ -1041,7 +1081,7 @@ shiftOp :
 // 
 // stext
 //   stringChar | stext stringChar
-// 
+
 string :
     //quotestext ⟦ ⟧ quote
     STRING_LITERAL
@@ -1125,20 +1165,23 @@ titleType :
     TITLE | SUBTITLE | SUBTTL
     ;
 
-// type
+type :
 //   structTag
 //   | unionTag
 //   | recordTag
 //   | distance
 //   | dataType
-//   | typeId
-// 
+//   | 
+    typeId
+;
+
 // typedefDir
 //   typeId TYPEDEF qualifier
-// 
-// typeId
-//   id
-// 
+ 
+typeId :
+    id
+    ;
+ 
 // unionTag
 //   id
 // 

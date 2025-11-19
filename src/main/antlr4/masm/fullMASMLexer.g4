@@ -39,8 +39,14 @@ fragment X : [xX];
 fragment Y : [yY];
 fragment Z : [zZ];
 
-ASTERISK : '*' ;
+// mnemonics
+EXIT : E X I T ;
+
 AND : 'A' 'N' 'D' ;
+ASTERISK : '*' ;
+AT_SIGN : '@' ;
+
+EQUALS : 'E''Q''U''A''L''S' ;
 
 EQ : 'E' 'Q' ;
 NE : 'N' 'E' ;
@@ -76,31 +82,82 @@ DOT_686     : '.''6''8''6' ;
 DOT_686P    : '.''6''8''6''P' ;
 DOT_387     : '.''3''8''7' ;
 
+DOT_CODE    : DOT 'c' 'o' 'd' 'e' ;
 DOT_STACK   : DOT 's' 't' 'a' 'c' 'k' ;
 
+DUP : 'D''U''P' ;
+
+DWORD : 'D''W''O''R''D' ;
+
+ENDP : 'E''N''D''P' ;
 EQU : 'E' 'Q' 'U' ;
+
+FAR : 'F''A''R' ;
+FWORD : 'F''W''O''R''D' ;
+
+INCLUDE : I N C L U D E ;
 
 LPAREN : '(' ;
 RPAREN : ')' ;
 
-PLUS : '+' ;
+LOCAL : 'L''O''C''A''L' ;
+LOCK : 'L''O''C''K' ;
 
+MINUS : '-' ;
+MMWORD : 'M''M''W''O''R''D' ;
+MOD : 'M' 'O' 'D' ;
+
+NEAR : 'N''E''A''R' ;
+NOT : 'N' 'O' 'T' ;
+
+OWORD : 'O''W''O''R''D' ;
+
+PLUS : '+' ;
+PROC : 'P''R''O''C' ;
+PTR : 'P''T''R' ;
+
+QUESTION_MARK : '?' ;
+QWORD : 'Q''W''O''R''D' ;
+
+REAL4 : 'R''E''A''L''4' ;
+REAL8 : 'R''E''A''L''8' ;
+REAL10 : 'R''E''A''L''1''0' ;
+REQ : 'R''E''Q' ;
+REP : 'R''E''P' ;
+REPE : 'R''E''P''E' ;
+REPZ : 'R''E''P''Z' ;
+REPNE : 'R''E''P''N''E' ;
+REPNZ : 'R''E''P''N''Z' ;
+
+SBYTE : 'S''B''Y''T''E' ;
+SDWORD : 'S''D''W''O''R''D' ;
 SLASH : '/' ;
 SHL : 'S' 'H' 'L' ;
 SHR : 'S' 'H' 'R' ;
-
-INCLUDE : I N C L U D E ;
-
-MINUS : '-' ;
-MOD : 'M' 'O' 'D' ;
-
-NOT : 'N' 'O' 'T' ;
-
 SUBTITLE : S U B T I T L E -> pushMode(TITLEMODE) ;
 SUBTTL : S U B T T L -> pushMode(TITLEMODE) ;
+SWORD : 'S''W''O''R''D' ;
+SQWORD : 'S''Q''W''O''R''D' ;
 
+TBYTE : 'T''B''Y''T''E' ;
 //TITLE : T I T L E -> pushMode(TITLEMODE) ;
 TITLE : T I T L E ;
+
+VARARG : 'V''A''R''A''R''G' ;
+
+WORD : 'W''O''R''D' ;
+
+XMMWORD : 'X''M''M''W''O''R''D' ;
+
+YMMWORD : 'Y''M''M''W''O''R''D' ;
+
+
+
+
+
+
+
+
 
 
 
