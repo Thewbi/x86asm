@@ -279,14 +279,14 @@ e08 :
     ;
  
 e09 :
-//   OFFSET e10
+    OFFSET e10
 //   | SEG e10
 //   | LROFFSET e10
 //   | TYPE e10
 //   | THIS e10
 //   | e09 PTR e10
-//    | 
-    e09 COLON e10
+//     
+    | e09 COLON e10
     | e10
     ;
  
@@ -299,6 +299,7 @@ e10 :
 
 e11 :
     LPAREN expr RPAREN
+    | L_ANGULAR_BRACKET expr R_ANGULAR_BRACKET
 //   | expr ⟦ ⟧
 //   | WIDTH id
 //   | MASK id
@@ -307,13 +308,13 @@ e11 :
 //   | LENGTH id
 //   | LENGTHOF id
 //   | recordConst
-//   | string
+    | string
     | constant
 //   | type
-//   | id
+    | id
 //   | $
 //   | segmentRegister
-//   | register
+    | register
 //   | ST
 //   | ST ( expr )
     ;
@@ -364,22 +365,22 @@ equType :
 //   errorOpt ;;
 // 
 // errorOpt
-//   .ERRtextItem ⟦ ⟧
-//   | .ERREconstExpr optText ⟦ ⟧
-//   | .ERRNZconstExpr optText ⟦ ⟧
-//   | .ERRBtextItem optText ⟦ ⟧
-//   | .ERRNBtextItem optText ⟦ ⟧
-//   | .ERRDEFid optText ⟦ ⟧
-//   | .ERRNDEFid optText ⟦ ⟧
-//   | .ERRDIFtextItem , textItem optText ⟦ ⟧
-//   | .ERRDIFItextItem , textItem optText ⟦ ⟧
-//   | .ERRIDNtextItem , textItem optText ⟦ ⟧
-//   | .ERRIDNItextItem , textItem optText ⟦ ⟧
-//   | .ERR1textItem ⟦ ⟧
-//   | .ERR2textItem ⟦ ⟧
+//   .ERR textItem ⟦ ⟧
+//   | .ERRE constExpr optText ⟦ ⟧
+//   | .ERRNZ constExpr optText ⟦ ⟧
+//   | .ERRB textItem optText ⟦ ⟧
+//   | .ERRNB textItem optText ⟦ ⟧
+//   | .ERRDEF id optText ⟦ ⟧
+//   | .ERRNDEF id optText ⟦ ⟧
+//   | .ERRDIF textItem , textItem optText ⟦ ⟧
+//   | .ERRDIF ItextItem , textItem optText ⟦ ⟧
+//   | .ERRIDN textItem , textItem optText ⟦ ⟧
+//   | .ERRIDNI textItem , textItem optText ⟦ ⟧
+//   | .ERR1 textItem ⟦ ⟧
+//   | .ERR2 textItem ⟦ ⟧
 // 
 // exitDir
-//   .EXITexpr ⟦ ⟧;;
+//   .EXIT expr ⟦ ⟧;;
 // 
 // exitmDir
 //   : EXITM | EXITM textItem
@@ -429,11 +430,13 @@ fileChar :
     ;
  
 fileCharList :
-    fileChar | fileCharList fileChar
+      fileChar 
+    | fileCharList fileChar
     ;
  
 fileSpec :
-    fileCharList | textLiteral
+      fileCharList 
+    | textLiteral
     ;
 
 // flagName
@@ -466,13 +469,13 @@ fileSpec :
 //   | id
  
 generalDir :
-//   modelDir | segOrderDir | nameDir
+    modelDir 
+// | segOrderDir | nameDir
 //   | includeLibDir | commentDir
 //   | groupDir | assumeDir
 //   | structDir | recordDir | typedefDir
 //   | externDir | publicDir | commDir | protoTypeDir
-//   | 
-    equDir 
+   | equDir 
 // | =Dir | textDir
 //   | contextDir | optionDir 
     | processorDir
@@ -486,11 +489,22 @@ generalDir :
 //   | aliasDir
     ;
  
-// gpRegister
-//   AX | EAX | CX | ECX | DX | EDX | BX | EBX
-//   | DI | EDI | SI | ESI | BP | EBP | SP | ESP
-//   | R8W | R8D | R9W | R9D | R12D | R13W | R13D | R14W | R14D
-// 
+gpRegister :
+      AX | EAX 
+    | CX | ECX
+    | DX | EDX 
+    | BX | EBX
+    | DI | EDI 
+    | SI | ESI 
+    | BP | EBP 
+    | SP | ESP
+    | R8W | R8D 
+    | R9W | R9D 
+    | R12D 
+    | R13W | R13D 
+    | R14W | R14D
+    ;
+ 
 // groupDir
 //   groupId GROUP segIdList
 // 
@@ -520,7 +534,7 @@ id :
 //   directiveList ⟧ ;;
 // 
 // ifStatement
-//   IF constExpr
+//     IF constExpr
 //   | IFE constExpr
 //   | IFB textItem
 //   | IFNB textItem
@@ -554,12 +568,13 @@ initValue :
     ;
  
 inSegDir :
-    labelDef? inSegmentDir
+      NEWLINE
+    | labelDef? inSegmentDir? NEWLINE
     ;
  
 inSegDirList :
-      inSegDir NEWLINE
-    | inSegDirList NEWLINE inSegDir
+      inSegDir 
+    | inSegDirList inSegDir
     ;
 
 inSegmentDir : 
@@ -570,10 +585,7 @@ inSegmentDir :
 //   | exitDir
 //   | offsetDir
 //   | labelDir
-
-//    | procDir localDirList? inSegDirList? endpDir // ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
-    | procDir NEWLINE inSegDirList? endpDir
-
+    | procDir localDirList? NEWLINE inSegDirList? endpDir // ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
 //   | invokeDir
     | generalDir
     ;
@@ -592,10 +604,10 @@ instruction :
 //   | ADDR expr
 // 
 // invokeDir
-//   INVOKEexpr , ⟦ ⟦ ;; ⟧ invokeList ⟧;;
+//   INVOKE expr , ⟦ ⟦ ;; ⟧ invokeList ⟧;;
 // 
 // invokeList
-//   invokeArg | invokeList, ;; ⟦ ⟧invokeArg
+//   invokeArg | invokeList, ;; ⟦ ⟧ invokeArg
 // 
 // keyword
 //   Jedes reservierte Wort.
@@ -611,10 +623,12 @@ labelDef :
  
 // labelDir
 //   id LABEL qualifiedType ;;
-// 
-// langType
-//   C | PASCAL | FORTRAN | BASIC | SYSCALL | STDCALL
-// 
+ 
+langType :
+//    C | 
+    PASCAL | FORTRAN | BASIC | SYSCALL | STDCALL
+    ;
+    
 // listDir
 //   listOption ;;
 // 
@@ -663,7 +677,7 @@ macroArgList :
     ;
  
 // macroBody
-//   localList ⟦ ⟧macroStmtList
+//   localList ⟦ ⟧ macroStmtList
 // 
 // macroCall
 //   id macroArgList ;;
@@ -727,26 +741,49 @@ macroArgList :
 // 
 // mapType
 //   ALL | NONE | NOTPUBLIC
-// 
-// memOption
-//   TINY | SMALL | MEDIUM | COMPACT | LARGE | HUGE | FLAT
+ 
+memOption :
+    TINY | SMALL | MEDIUM | COMPACT | LARGE | HUGE | FLAT
+    ;
  
 mnemonic :
     // Anweisungsname.
-    EXIT
+      ADD
+    | CALL
+    | CMP
+    | DIV
+    | EXIT
+    | INC
+    | JE
+    | JG
+    | JL
+    | JMP
+    | JNE
+    | LOOP
+    | MOV
+    | MUL
+    | POP
+    | PUSH
+    | RET
+    | SUB
     ;
  
-// modelDir
-//   .MODELmemOption , modelOptlist⟦ ⟧;;
-// 
-// modelOpt
-//   langType | stackOption
-// 
-// modelOptlist
-//   modelOpt | modelOptlist , modelOpt
-// 
+modelDir :
+    DOT_MODEL memOption COMMA modelOptlist // ⟦ ⟧;;
+    ;
+
+modelOpt :
+      langType 
+    | stackOption
+    ;
+
+modelOptlist :
+      modelOpt 
+    | modelOptlist COMMA modelOpt
+    ;
+
 // module
-//   directiveList ⟦ ⟧endDir
+//   directiveList ⟦ ⟧ endDir
  
 mulOp :
     ASTERISK | SLASH | MOD
@@ -768,9 +805,9 @@ nearfar :
 //   offsetDirType ;;
 // 
 // offsetDirType
-//   EVEN
+//     EVEN
 //   | ORG immExpr
-//   | ALIGNconstExpr ⟦ ⟧
+//   | ALIGN constExpr ⟦ ⟧
 // 
 // offsetType
 //   GROUP | SEGMENT | FLAT
@@ -828,7 +865,7 @@ orOp :
 //   constExpr
  
 parm :
-    parmId COLON qualifiedType? // ⟦ ⟧
+      parmId COLON qualifiedType? // ⟦ ⟧
     | parmId constExpr ( COLON qualifiedType )? // ⟦ ⟧ ⟦ : qualifiedType ⟧
     ;
  
@@ -837,12 +874,12 @@ parmId :
     ;
  
 parmList :
-    parm 
+      parm 
     | parmList COMMA parm // ;; ⟦ ⟧ parm
     ;
  
 parmType :
-    REQ 
+      REQ 
     | EQUALS textLiteral 
     | VARARG
     ;
@@ -926,10 +963,11 @@ qualifiedType :
  
 // qualifier
 //   qualifiedType | PROTO protoSpec
-// 
-// quote
-//   " | '
-// 
+ 
+quote :
+    DOUBLE_QUOTE | SINGLE_QUOTE
+    ;
+ 
 // qwordRegister
 //   RAX | RCX | RDX | RBX | RSP | RBP | RSI | RDI
 //   | R8 | R9 | R10 | R11 | R12 | R13 | R14 | R15
@@ -961,12 +999,22 @@ qualifiedType :
 // 
 // recordTag
 //   id
-// 
-// register
-//   specialRegister | gpRegister | byteRegister | qwordRegister | fpuRegister | SIMDRegister | segmentRegister
-// 
-// regList
-//   register | regList register
+
+register :
+//      specialRegister 
+//    | 
+    gpRegister 
+//    | byteRegister 
+//    | qwordRegister 
+//    | fpuRegister 
+//    | SIMDRegister 
+//    | segmentRegister
+    ;
+
+regList :
+      register 
+    | regList register
+    ;
  
 relOp :
     EQ | NE | LT | LE | GT | GE
@@ -1072,23 +1120,26 @@ shiftOp :
 //   CR0 | CR2 | CR3
 //   | DR0 | DR1 | DR2 | DR3 | DR6 | DR7
 //   | TR3 | TR4 | TR5 | TR6 | TR7
-// 
-// stackOption
-//   NEARSTACK | FARSTACK
-// 
+ 
+stackOption :
+    NEARSTACK | FARSTACK
+    ;
+ 
 // startupDir
 //   .STARTUP ;;
-// 
-// stext
-//   stringChar | stext stringChar
+
+//stext :
+//    stringChar | stext stringChar
+//    ;
 
 string :
-    //quotestext ⟦ ⟧ quote
-    STRING_LITERAL
+    //quote stext? quote
+      SINGLE_QUOTE_LITERAL
+    | STRING_LITERAL
     ;
  
 // stringChar
-//   quotequote | Ein beliebiges Zeichen mit Ausnahme von Anführungszeichen.
+//   quote quote | Ein beliebiges Zeichen mit Ausnahme von Anführungszeichen.
 // 
 // structBody
 //   structItem ;;

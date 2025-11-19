@@ -39,12 +39,72 @@ fragment X : [xX];
 fragment Y : [yY];
 fragment Z : [zZ];
 
+// registers
+
+AX : A X ;
+EAX : E A X ;
+CX : C X ;
+ECX : E C X ;
+DX : D X ;
+EDX : E D X ;
+BX : B X ;
+EBX : E B X ;
+DI : D I ;
+EDI : E D I ;
+SI : S I ;
+ESI : E S I ;
+BP : B P ;
+EBP : E B P ;
+SP : S P ;
+ESP : E S P ;
+R8W : R '8' W ;
+R8D : R '8' D ;
+R9W : R '9' W ;
+R9D : R '9' D ;
+R12D : R '1' '2' D ;
+R13W : R '1' '3' W ;
+R13D : R '1' '3' D ;
+R14W : R '1' '4' W ;
+R14D : R '1' '4' D ;
+
 // mnemonics
+
+ADD : A D D ;
+
+CALL : C A L L ;
+CMP : C M P ;
+
+DIV : D I V ;
+
 EXIT : E X I T ;
+
+INC : I N C ;
+
+JE : J E ;
+JG : J G ;
+JL : J L ;
+JMP : J M P ;
+JNE : J N E ;
+
+LOOP : L O O P ;
+
+MOV : M O V ;
+MUL : M U L ;
+
+POP : P O P ;
+PUSH : P U S H ;
+
+RET : R E T ;
+
+SUB : S U B ;
+
+// keywords
 
 AND : 'A' 'N' 'D' ;
 ASTERISK : '*' ;
 AT_SIGN : '@' ;
+
+DOUBLE_QUOTE : '"' ;
 
 EQUALS : 'E''Q''U''A''L''S' ;
 
@@ -83,7 +143,23 @@ DOT_686P    : '.''6''8''6''P' ;
 DOT_387     : '.''3''8''7' ;
 
 DOT_CODE    : DOT 'c' 'o' 'd' 'e' ;
+DOT_MODEL   : DOT 'm' 'o' 'd' 'e' 'l' ;
 DOT_STACK   : DOT 's' 't' 'a' 'c' 'k' ;
+
+//C : C ;
+PASCAL : P A S C A L ;
+FORTRAN : F O R T R A N ;
+BASIC : B A S I C ;
+SYSCALL : S Y S C A L L ;
+STDCALL : S T D C A L L ;
+
+TINY : T I N Y ;
+SMALL : S M A L L ;
+MEDIUM : M E D I U M ;
+COMPACT : C O M P A C T ;
+LARGE : L A R G E ;
+HUGE : H U G E ;
+FLAT : F L A T ;
 
 DUP : 'D''U''P' ;
 
@@ -93,12 +169,16 @@ ENDP : 'E''N''D''P' ;
 EQU : 'E' 'Q' 'U' ;
 
 FAR : 'F''A''R' ;
+FARSTACK : 'F''A''R''S''T''A''C''K' ;
 FWORD : 'F''W''O''R''D' ;
 
 INCLUDE : I N C L U D E ;
 
 LPAREN : '(' ;
 RPAREN : ')' ;
+
+L_ANGULAR_BRACKET : '[' ;
+R_ANGULAR_BRACKET : ']' ;
 
 LOCAL : 'L''O''C''A''L' ;
 LOCK : 'L''O''C''K' ;
@@ -108,9 +188,11 @@ MMWORD : 'M''M''W''O''R''D' ;
 MOD : 'M' 'O' 'D' ;
 
 NEAR : 'N''E''A''R' ;
+NEARSTACK : 'N''E''A''R''S''T''A''C''K' ;
 NOT : 'N' 'O' 'T' ;
 
 OWORD : 'O''W''O''R''D' ;
+OFFSET : 'O''F''F''S''E''T' ;
 
 PLUS : '+' ;
 PROC : 'P''R''O''C' ;
@@ -138,6 +220,8 @@ SUBTITLE : S U B T I T L E -> pushMode(TITLEMODE) ;
 SUBTTL : S U B T T L -> pushMode(TITLEMODE) ;
 SWORD : 'S''W''O''R''D' ;
 SQWORD : 'S''Q''W''O''R''D' ;
+SINGLE_QUOTE : '\'';
+ 
 
 TBYTE : 'T''B''Y''T''E' ;
 //TITLE : T I T L E -> pushMode(TITLEMODE) ;
@@ -165,8 +249,10 @@ IDENTIFIER : ( ('@')? DOT? ('_')* [_0-9a-zA-Z]* [a-zA-Z]+ ) ( DOT? ('_')* [_0-9a
 
 WS : [ \t\r]+ -> skip ;
 
-STRING_LITERAL : UNTERMINATED_STRING_LITERAL '"' ;
+SINGLE_QUOTE_LITERAL : UNTERMINATED_SINGLE_QUOTE_LITERAL SINGLE_QUOTE ;
+UNTERMINATED_SINGLE_QUOTE_LITERAL : SINGLE_QUOTE (~['\\\r\n] | '\\' (. | EOF))* ;
 
+STRING_LITERAL : UNTERMINATED_STRING_LITERAL '"' ;
 UNTERMINATED_STRING_LITERAL : '"' (~["\\\r\n] | '\\' (. | EOF))* ;
 
 NEWLINE : [\n] ;
