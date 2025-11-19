@@ -8,17 +8,6 @@ options {
     caseInsensitive = true;
 }
 
-//asm_file :
-//    ( 
-//          NEWLINE 
-//        | ( inSegmentDir | simpleSegDir ) NEWLINE 
-//    )*
-//    ( 
-//          NEWLINE 
-//        | ( inSegmentDir | simpleSegDir ) 
-//    )
-//	;
-
 asm_file :
     ( inSegmentDir | simpleSegDir | module )+ EOF
     ;
@@ -100,10 +89,11 @@ asmInstruction :
 // 
 // bool
 //   TRUE | FALSE
-// 
-// byteRegister
-//   AL | AH | CL | CH | DL | DH | BL | BH | R8B | R9B | R10B | R11B | R12B | R13B | R14B | R15B
-// 
+ 
+byteRegister :
+    AL | AH | CL | CH | DL | DH | BL | BH | R8B | R9B | R10B | R11B | R12B | R13B | R14B | R15B
+    ;
+
 // cExpr
 //   aExpr | cExpr || aExpr
 // 
@@ -396,10 +386,12 @@ equType :
 // 
 // exitDir
 //   .EXIT expr ⟦ ⟧;;
-// 
-// exitmDir
-//   : EXITM | EXITM textItem
-// 
+ 
+exitmDir :
+      COLON EXITM 
+    | EXITM textItem
+    ;
+
 // exponent
 //   Esign ⟦ ⟧decNumber
  
@@ -484,14 +476,14 @@ fileSpec :
 //   | id
  
 generalDir :
-    modelDir 
-// | segOrderDir | nameDir
+      modelDir 
+//   | segOrderDir | nameDir
 //   | includeLibDir | commentDir
 //   | groupDir | assumeDir
 //   | structDir | recordDir | typedefDir
 //   | externDir | publicDir | commDir | protoTypeDir
    | equDir 
-// | =Dir | textDir
+//   | =Dir | textDir
 //   | contextDir | optionDir 
     | processorDir
 //   | radixDir
@@ -499,7 +491,8 @@ generalDir :
 //   | crefDir | echoDir
 //   | ifDir | errorDir 
     | includeDir
-//   | macroDir | macroCall | macroRepeat | purgeDir
+    | macroDir
+//   | macroCall | macroRepeat | purgeDir
 //   | macroWhile | macroFor | macroForc
 //   | aliasDir
     ;
@@ -538,9 +531,11 @@ id :
 //    | IDENTIFIER
     ;
 
-// idList
-//   id | idList , id
-// 
+idList :
+      id 
+    | idList COMMA id
+    ;
+
 // ifDir
 //   ifStatement ;;
 //   directiveList
@@ -594,7 +589,7 @@ inSegDirList :
     ;
 
 inSegmentDir : 
-    instruction
+      instruction
     | dataDir
 //   | controlDir
 //   | startupDir
@@ -661,9 +656,10 @@ langType :
 //   | .LISTMACROALL | .LALL
 //   | .NOLISTMACRO | .SALL
 //   | .LISTMACRO | .XALL
-// 
-// localDef
-//   LOCAL idList ;;
+ 
+localDef :
+    LOCAL idList // ;;
+    ;
  
 localDir :
     LOCAL parmList //;;
@@ -674,8 +670,10 @@ localDirList :
     | localDirList localDir
     ;
  
-// localList
-//   localDef | localList localDef
+localList :
+      localDef 
+    | localList localDef
+    ;
 
 macroArg :
 //   % constExpr
@@ -692,18 +690,18 @@ macroArgList :
     | macroArgList COMMA macroArg
     ;
  
-// macroBody
-//   localList ⟦ ⟧ macroStmtList
-// 
+macroBody :
+    localList? macroStmtList
+    ;
+ 
 // macroCall
 //   id macroArgList ;;
 //   | id ( macroArgList )
-// 
-// macroDir
-//   idMACRO macroParmList ⟦ ⟧;;
-//   macroBody
-//   ENDM ;;
-// 
+ 
+macroDir :
+    id MACRO macroParmList? macroBody ENDM
+    ;
+ 
 // macroFor
 //   forDir forParm , < macroArgList > ;;
 //   macroBody
@@ -722,16 +720,20 @@ macroArgList :
 // 
 // macroIdList
 //   macroId | macroIdList , macroId
-// 
-// macroLabel
-//   id
-// 
-// macroParm
-//   id: parmType ⟦ ⟧
-// 
-// macroParmList
-//   macroParm | macroParmList, ;; ⟦ ⟧macroParm
-// 
+ 
+macroLabel :
+    id
+    ;
+ 
+macroParm :
+    id COLON parmType // ⟦ ⟧
+    ;
+
+macroParmList :
+      macroParm 
+    | macroParmList COMMA macroParm //;; ⟦ ⟧macroParm
+    ;
+
 // macroProcId
 //   id
 // 
@@ -739,17 +741,20 @@ macroArgList :
 //   repeatDir constExpr ;;
 //   macroBody
 //   ENDM ;;
-// 
-// macroStmt
-//   directive
-//   | exitmDir
-//   | : macroLabel
-//   | GOTO macroLabel
-// 
-// macroStmtList
-//   macroStmt ;;
-//   | macroStmtList macroStmt ;;
-// 
+ 
+macroStmt :
+      directive
+    | instruction
+    | exitmDir
+    | COMMA macroLabel
+    | GOTO macroLabel
+    ;
+ 
+macroStmtList :
+      macroStmt // ;;
+    | macroStmtList macroStmt // ;;
+    ;
+ 
 // macroWhile
 //   WHILE constExpr ;;
 //   macroBody
@@ -1022,7 +1027,7 @@ register :
 //      specialRegister 
 //    | 
     gpRegister 
-//    | byteRegister 
+    | byteRegister 
 //    | qwordRegister 
 //    | fpuRegister 
 //    | SIMDRegister 
@@ -1197,10 +1202,13 @@ string :
 // 
 // textDir
 //   id textMacroDir ;;
-// 
-// textItem
-//   textLiteral | textMacroId | % constExpr
-// 
+ 
+textItem :
+      textLiteral 
+    | textMacroId 
+    | PERCENT_SIGN constExpr
+    ;
+
 // textLen
 //   constExpr
 // 

@@ -44,6 +44,23 @@ fragment Z : [zZ];
 
 // registers
 
+AL : A L ;
+AH : A H ;
+CL : C L ;
+CH : C H ;
+DL : D L ;
+DH : D H ;
+BL : B L ;
+BH : B H ;
+R8B : R '8' B ;
+R9B : R '9' B ;
+R10B : R '1' '0' B ;
+R11B : R '1' '1' B ;
+R12B : R '1' '2' B ;
+R13B : R '1' '3' B ;
+R14B : R '1' '4' B ;
+R15B : R '1' '5' B ;
+
 AX : A X ;
 EAX : E A X ;
 CX : C X ;
@@ -171,12 +188,16 @@ DUP : 'D''U''P' ;
 DWORD : 'D''W''O''R''D' ;
 
 ENDP : 'E''N''D''P' ;
+ENDM : 'E''N''D''M' ;
 END : 'E''N''D' ;
-EQU : 'E' 'Q' 'U' ;
+EQU : 'E''Q''U' ;
+EXITM : 'E''X''I''T''M' ;
 
 FAR : 'F''A''R' ;
 FARSTACK : 'F''A''R''S''T''A''C''K' ;
 FWORD : 'F''W''O''R''D' ;
+
+GOTO : 'G''O''T''O' ;
 
 INCLUDE : I N C L U D E ;
 
@@ -189,6 +210,7 @@ R_ANGULAR_BRACKET : ']' ;
 LOCAL : 'L''O''C''A''L' ;
 LOCK : 'L''O''C''K' ;
 
+MACRO : 'M' 'A' 'C' 'R' 'O' ;
 MINUS : '-' ;
 MMWORD : 'M''M''W''O''R''D' ;
 MOD : 'M' 'O' 'D' ;
@@ -200,6 +222,7 @@ NOT : 'N' 'O' 'T' ;
 OWORD : 'O''W''O''R''D' ;
 OFFSET : 'O''F''F''S''E''T' ;
 
+PERCENT_SIGN : '%' ;
 PLUS : '+' ;
 PROC : 'P''R''O''C' ;
 PTR : 'P''T''R' ;
