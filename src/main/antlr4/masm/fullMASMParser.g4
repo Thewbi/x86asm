@@ -13,29 +13,32 @@ asm_file :
     ;
 
 // ;; :
-//    endOfLine | comment
+//    endOfLine | comment
 //    ;
  
 // =Dir
-//   id = immExpr ;;
+//   id = immExpr ;;
+assignmentDir :
+    id EQUALS_SIGN immExpr
+    ;
  
 addOp :
     PLUS | MINUS
     ;
  
 // aExpr
-//   term | aExpr && term
+//   term | aExpr && term
 // 
 // altId
-//   id
+//   id
  
 alpha :
-//   Ein beliebiger Groß- oder Kleinbuchstabe (A-Z) oder eines der folgenden vier Zeichen: @ _ $ ?
+//   Ein beliebiger Groß- oder Kleinbuchstabe (A-Z) oder eines der folgenden vier Zeichen: @ _ $ ?
     IDENTIFIER
     ;
  
 //arbitraryText
-//    charList
+//    charList
 //    ;
  
 asmInstruction :
@@ -43,90 +46,90 @@ asmInstruction :
     ;
 
 // assumeDir
-//   ASSUME assumeList ;;
-//   | ASSUME NOTHING ;;
+//   ASSUME assumeList ;;
+//   | ASSUME NOTHING ;;
 // 
 // assumeList
-//   assumeRegister | assumeList , assumeRegister
+//   assumeRegister | assumeList , assumeRegister
 // 
 // assumeReg
-//   register : assumeVal
+//   register : assumeVal
 // 
 // assumeRegister
-//   assumeSegReg | assumeReg
+//   assumeSegReg | assumeReg
 // 
 // assumeSegReg
-//   segmentRegister : assumeSegVal
+//   segmentRegister : assumeSegVal
 // 
 // assumeSegVal
-//   frameExpr | NOTHING | ERROR
+//   frameExpr | NOTHING | ERROR
 // 
 // assumeVal
-//   qualifiedType | NOTHING | ERROR
+//   qualifiedType | NOTHING | ERROR
 // 
 // bcdConst
-//   sign ⟦ ⟧decNumber
+//   sign ⟦ ⟧decNumber
 // 
 // binaryOp
-//   == | != | >= | <= | > | < | &
+//   == | != | >= | <= | > | < | &
 // 
 // bitDef
-//   bitFieldId: bitFieldSize = constExpr ⟦ ⟧
+//   bitFieldId: bitFieldSize = constExpr ⟦ ⟧
 // 
 // bitDefList
-//   bitDef | bitDefList, ;; ⟦ ⟧bitDef
+//   bitDef | bitDefList, ;; ⟦ ⟧bitDef
 // 
 // bitFieldId
-//   id
+//   id
 // 
 // bitFieldSize
-//   constExpr
+//   constExpr
 // 
 // blockStatements
-//   directiveList
-//   | .CONTINUE.IF cExpr ⟦ ⟧
-//   | .BREAK.IF cExpr ⟦ ⟧
+//   directiveList
+//   | .CONTINUE.IF cExpr ⟦ ⟧
+//   | .BREAK.IF cExpr ⟦ ⟧
 // 
 // bool
-//   TRUE | FALSE
+//   TRUE | FALSE
  
 byteRegister :
     AL | AH | CL | CH | DL | DH | BL | BH | R8B | R9B | R10B | R11B | R12B | R13B | R14B | R15B
     ;
 
 // cExpr
-//   aExpr | cExpr || aExpr
+//   aExpr | cExpr || aExpr
 // 
 // character
-//   Ein beliebiges Zeichen mit Ordnungszahl im Bereich 0 bis 255 außer Zeilenfeed (10).
+//   Ein beliebiges Zeichen mit Ordnungszahl im Bereich 0 bis 255 außer Zeilenfeed (10).
 // 
 // charList
-//   character | charList character
+//   character | charList character
 // 
 // className
-//   string
+//   string
 // 
 // commDecl
-//   nearfar ⟦ ⟧ ⟦ langType ⟧ id : commType
-//   : constExpr ⟦ ⟧
+//   nearfar ⟦ ⟧ ⟦ langType ⟧ id : commType
+//   : constExpr ⟦ ⟧
 // 
 // commDir
-//   COMM
-//   commList ;;
+//   COMM
+//   commList ;;
 // 
 // comment
-//   ; text ;;
+//   ; text ;;
 // 
 // commentDir
-//   COMMENT delimiter
-//   text
-//   text delimiter text ;;
+//   COMMENT delimiter
+//   text
+//   text delimiter text ;;
 // 
 // commList
-//   commDecl | commList , commDecl
+//   commDecl | commList , commDecl
 // 
 // commType
-//   type | constExpr
+//   type | constExpr
  
 constant :
     // DIGITS_RADIX_OVERRIDE ⟦ ⟧
@@ -138,79 +141,80 @@ constExpr :
     ;
 
 // contextDir
-//   PUSHCONTEXT contextItemList ;;
-//   | POPCONTEXT contextItemList ;;
+//   PUSHCONTEXT contextItemList ;;
+//   | POPCONTEXT contextItemList ;;
 // 
 // contextItem
-//   ASSUMES | RADIX | LISTING | CPU | ALL
+//   ASSUMES | RADIX | LISTING | CPU | ALL
 // 
 // contextItemList
-//   contextItem | contextItemList , contextItem
+//   contextItem | contextItemList , contextItem
 // 
 // controlBlock
-//   whileBlock | repeatBlock
+//   whileBlock | repeatBlock
 // 
 // controlDir
-//   controlIf | controlBlock
+//   controlIf | controlBlock
 // 
 // controlElseif
-//   .ELSEIF cExpr ;;
-//   directiveList
-//   controlElseif ⟦ ⟧
+//   .ELSEIF cExpr ;;
+//   directiveList
+//   controlElseif ⟦ ⟧
 // 
 // controlIf
-//   .IF cExpr ;;
-//   directiveList
-//   controlElseif ⟦ ⟧
-//   .ELSE⟦ ;;
-//   directiveList⟧
-//   .ENDIF ;;
+//   .IF cExpr ;;
+//   directiveList
+//   controlElseif ⟦ ⟧
+//   .ELSE⟦ ;;
+//   directiveList⟧
+//   .ENDIF ;;
 // 
 // coprocessor
-//   .8087 | .287 | .387 | .NO87
+//   .8087 | .287 | .387 | .NO87
 // 
 // crefDir
-//   crefOption ;;
+//   crefOption ;;
 // 
 // crefOption
-//   .CREF
-//   | .XCREFidList ⟦ ⟧
-//   | .NOCREFidList ⟦ ⟧
+//   .CREF
+//   | .XCREFidList ⟦ ⟧
+//   | .NOCREFidList ⟦ ⟧
 // 
 // cxzExpr
-//   expr
-//   | ! expr
-//   | expr == expr
-//   | expr != expr
+//   expr
+//   | ! expr
+//   | expr == expr
+//   | expr != expr
  
 dataDecl :
-//   DB | DW | DD | DF | DQ | DT | dataType | typeId
-    dataType
+    DB | DW | DD | DF | DQ | DT | dataType | typeId
+    //dataType
     ;
  
 dataDir :
-//   id ⟦ ⟧ dataItem ;;
+//   id ⟦ ⟧ dataItem ;;
     id dataItem
     ;
  
 dataItem :
     dataDecl scalarInstList
-//   | structTag structInstList
-//   | typeId structInstList
-//   | unionTag structInstList
-//   | recordTag recordInstList
+//   | structTag structInstList
+//   | typeId structInstList
+//   | unionTag structInstList
+//   | recordTag recordInstList
     ;
  
 dataType :
-    BYTE | SBYTE | WORD | SWORD | DWORD | SDWORD | FWORD | QWORD | SQWORD | TBYTE | OWORD | REAL4 | REAL8 | REAL10 | MMWORD | XMMWORD | YMMWORD
+      BYTE | SBYTE | WORD | SWORD | DWORD | SDWORD | FWORD | QWORD | SQWORD 
+    | TBYTE | OWORD | REAL4 | REAL8 | REAL10 | MMWORD | XMMWORD | YMMWORD
     ;
 
 // decdigit
-//   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+//   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 // 
 // decNumber
-//   decdigit
-//   | decNumber decdigit
+//   decdigit
+//   | decNumber decdigit
  
 delimiter :
     // Beliebiges Zeichen außer whiteSpaceCharacter
@@ -218,9 +222,9 @@ delimiter :
     ;
 
 // digits
-//   decdigit
-//   | digits decdigit
-//   | digits hexdigit
+//   decdigit
+//   | digits decdigit
+//   | digits hexdigit
  
 directive :
       generalDir 
@@ -274,20 +278,20 @@ e07 :
     ;
  
 e08 :
-//   HIGH e09
-//   | LOW e09
-//   | HIGHWORD e09
-//   | LOWWORD e09
+//   HIGH e09
+//   | LOW e09
+//   | HIGHWORD e09
+//   | LOWWORD e09
 //    | 
     e09
     ;
  
 e09 :
     OFFSET e10
-//   | SEG e10
-//   | LROFFSET e10
+//   | SEG e10
+//   | LROFFSET e10
 //    | TYPE e10
-//   | THIS e10
+//   | THIS e10
     | e09 PTR e10
 //     
     | e09 COLON e10
@@ -295,56 +299,56 @@ e09 :
     ;
  
 e10 :
-    //  e10 DOT e11
-    //| 
-    e10 expr // ⟦ ⟧
+      e10 DOT e11
+    | e10 expr // ⟦ ⟧
     | e11
     ;
 
 e11 :
-    LPAREN expr RPAREN
+      LPAREN expr RPAREN
     | L_ANGULAR_BRACKET expr R_ANGULAR_BRACKET
-//   | expr ⟦ ⟧
-//   | WIDTH id
-//   | MASK id
-//   | SIZE sizeArg
-//   | SIZEOF sizeArg
-//   | LENGTH id
-//   | LENGTHOF id
-//   | recordConst
+//    | expr //⟦ ⟧
+//    | WIDTH id
+//    | MASK id
+//    | SIZE sizeArg
+//    | SIZEOF sizeArg
+//    | LENGTH id
+//    | LENGTHOF id
+//    | recordConst
     | string
     | constant
     | type
     | id
-//   | $
-//   | segmentRegister
+    | DOLLAR_SIGN
+//    | segmentRegister
     | register
-//   | ST
-//   | ST ( expr )
+//    | ST
+//    | ST ( expr )
+    | offsetType
     ;
  
 // echoDir
-//   ECHO arbitraryText ;;
-//   %OUT arbitraryText ;;
+//   ECHO arbitraryText ;;
+//   %OUT arbitraryText ;;
 // 
 // elseifBlock
-//   elseifStatement ;;
-//   directiveList
-//   elseifBlock ⟦ ⟧
+//   elseifStatement ;;
+//   directiveList
+//   elseifBlock ⟦ ⟧
 // 
 // elseifStatement
-//   ELSEIF constExpr
-//   | ELSEIFE constExpr
-//   | ELSEIFB textItem
-//   | ELSEIFNB textItem
-//   | ELSEIFDEF id
-//   | ELSEIFNDEF id
-//   | ELSEIFDIF textItem , textItem
-//   | ELSEIFDIFI textItem , textItem
-//   | ELSEIFIDN textItem , textItem
-//   | ELSEIFIDNI textItem , textItem
-//   | ELSEIF1
-//   | ELSEIF2
+//   ELSEIF constExpr
+//   | ELSEIFE constExpr
+//   | ELSEIFB textItem
+//   | ELSEIFNB textItem
+//   | ELSEIFDEF id
+//   | ELSEIFNDEF id
+//   | ELSEIFDIF textItem , textItem
+//   | ELSEIFDIFI textItem , textItem
+//   | ELSEIFIDN textItem , textItem
+//   | ELSEIFIDNI textItem , textItem
+//   | ELSEIF1
+//   | ELSEIF2
 
 endDir :
     END immExpr // ⟦ ⟧;;
@@ -355,7 +359,7 @@ endpDir :
     ;
  
 // endsDir
-//   id ENDS ;;
+//   id ENDS ;;
  
 equDir :
     textMacroId EQU equType // ;;
@@ -367,25 +371,25 @@ equType :
     ;
 
 // errorDir
-//   errorOpt ;;
+//   errorOpt ;;
 // 
 // errorOpt
-//   .ERR textItem ⟦ ⟧
-//   | .ERRE constExpr optText ⟦ ⟧
-//   | .ERRNZ constExpr optText ⟦ ⟧
-//   | .ERRB textItem optText ⟦ ⟧
-//   | .ERRNB textItem optText ⟦ ⟧
-//   | .ERRDEF id optText ⟦ ⟧
-//   | .ERRNDEF id optText ⟦ ⟧
-//   | .ERRDIF textItem , textItem optText ⟦ ⟧
-//   | .ERRDIF ItextItem , textItem optText ⟦ ⟧
-//   | .ERRIDN textItem , textItem optText ⟦ ⟧
-//   | .ERRIDNI textItem , textItem optText ⟦ ⟧
-//   | .ERR1 textItem ⟦ ⟧
-//   | .ERR2 textItem ⟦ ⟧
+//   .ERR textItem ⟦ ⟧
+//   | .ERRE constExpr optText ⟦ ⟧
+//   | .ERRNZ constExpr optText ⟦ ⟧
+//   | .ERRB textItem optText ⟦ ⟧
+//   | .ERRNB textItem optText ⟦ ⟧
+//   | .ERRDEF id optText ⟦ ⟧
+//   | .ERRNDEF id optText ⟦ ⟧
+//   | .ERRDIF textItem , textItem optText ⟦ ⟧
+//   | .ERRDIF ItextItem , textItem optText ⟦ ⟧
+//   | .ERRIDN textItem , textItem optText ⟦ ⟧
+//   | .ERRIDNI textItem , textItem optText ⟦ ⟧
+//   | .ERR1 textItem ⟦ ⟧
+//   | .ERR2 textItem ⟦ ⟧
 // 
 // exitDir
-//   .EXIT expr ⟦ ⟧;;
+//   .EXIT expr ⟦ ⟧;;
  
 exitmDir :
       COLON EXITM 
@@ -393,13 +397,13 @@ exitmDir :
     ;
 
 // exponent
-//   Esign ⟦ ⟧decNumber
+//   Esign ⟦ ⟧decNumber
  
 expr :
-//   SHORT e05
-//   | .TYPE e01
-//   | OPATTR e01
-//   | 
+//   SHORT e05
+//   | .TYPE e01
+//   | OPATTR e01
+//   | 
     e01
     ;
 
@@ -409,28 +413,28 @@ exprList :
     ;
  
 // externDef
-//   langType ⟦ ⟧ id ⟦ ( altId ) ⟧ : externType
+//   langType ⟦ ⟧ id ⟦ ( altId ) ⟧ : externType
 // 
 // externDir
-//   externKey externList ;;
+//   externKey externList ;;
 // 
 // externKey
-//   EXTRN | EXTERN | EXTERNDEF
+//   EXTRN | EXTERN | EXTERNDEF
 // 
 // externList
-//   externDef | externList, ;; ⟦ ⟧externDef
+//   externDef | externList, ;; ⟦ ⟧externDef
 // 
 // externType
-//   ABS | qualifiedType
+//   ABS | qualifiedType
 // 
 // fieldAlign
-//   constExpr
+//   constExpr
 // 
 // fieldInit
-//   initValue ⟦ ⟧ |structInstance
+//   initValue ⟦ ⟧ |structInstance
 // 
 // fieldInitList
-//   fieldInit | fieldInitList, ;; ⟦ ⟧fieldInit
+//   fieldInit | fieldInitList, ;; ⟦ ⟧fieldInit
  
 fileChar :
     delimiter
@@ -447,54 +451,57 @@ fileSpec :
     ;
 
 // flagName
-//   ZERO? | CARRY? | OVERFLOW? | SIGN? | PARITY?
+//   ZERO? | CARRY? | OVERFLOW? | SIGN? | PARITY?
 // 
 // floatNumber
-//   sign ⟦ ⟧ decNumber . ⟦ decNumber ⟧ ⟦ exponent ⟧
-//   | digits R
-//   | digits r
+//   sign ⟦ ⟧ decNumber . ⟦ decNumber ⟧ ⟦ exponent ⟧
+//   | digits R
+//   | digits r
 // 
 // forcDir
-//   FORC | IRPC
+//   FORC | IRPC
 // 
 // forDir
-//   FOR | IRP
+//   FOR | IRP
 // 
 // forParm
-//   id: forParmType ⟦ ⟧
+//   id: forParmType ⟦ ⟧
 // 
 // forParmType
-//   REQ | = textLiteral
+//   REQ | = textLiteral
 // 
 // fpuRegister
-//   ST expr
+//   ST expr
 // 
 // frameExpr
-//   SEG id
-//   | DGROUP : id
-//   | segmentRegister : id
-//   | id
+//   SEG id
+//   | DGROUP : id
+//   | segmentRegister : id
+//   | id
  
 generalDir :
       modelDir 
 //   | segOrderDir | nameDir
-//   | includeLibDir | commentDir
-//   | groupDir | assumeDir
-//   | structDir | recordDir | typedefDir
-//   | externDir | publicDir | commDir | protoTypeDir
+//   | includeLibDir | commentDir
+//   | groupDir | assumeDir
+//   | structDir | recordDir | typedefDir
+//   | externDir | publicDir | commDir | protoTypeDir
    | equDir 
-//   | =Dir | textDir
-//   | contextDir | optionDir 
+//   | =Dir
+    | assignmentDir
+//  | textDir
+//   | contextDir 
+    | optionDir 
     | processorDir
-//   | radixDir
+//   | radixDir
     | titleDir // | pageDir | listDir
-//   | crefDir | echoDir
-//   | ifDir | errorDir 
+//   | crefDir | echoDir
+//   | ifDir | errorDir 
     | includeDir
     | macroDir
 //   | macroCall | macroRepeat | purgeDir
-//   | macroWhile | macroFor | macroForc
-//   | aliasDir
+//   | macroWhile | macroFor | macroForc
+//   | aliasDir
     ;
  
 gpRegister :
@@ -514,20 +521,20 @@ gpRegister :
     ;
  
 // groupDir
-//   groupId GROUP segIdList
+//   groupId GROUP segIdList
 // 
 // groupId
-//   id
+//   id
 // 
 // hexdigit
-//   a | b | c | d | e | f
-//   | A | B | C | D | E | F
+//   a | b | c | d | e | f
+//   | A | B | C | D | E | F
  
 id :
     alpha
-//   | id alpha
-//   | id decdigit
-//   Die maximale Länge beträgt 247 Zeichen.
+//   | id alpha
+//   | id decdigit
+//   Die maximale Länge beträgt 247 Zeichen.
 //    | IDENTIFIER
     ;
 
@@ -536,26 +543,28 @@ idList :
     | idList COMMA id
     ;
 
+//TODO: Continue here
+
 // ifDir
-//   ifStatement ;;
-//   directiveList
-//   elseifBlock ⟦ ⟧
-//   ELSE⟦ ;;
-//   directiveList ⟧ ;;
+//   ifStatement ;;
+//   directiveList
+//   elseifBlock ⟦ ⟧
+//   ELSE⟦ ;;
+//   directiveList ⟧ ;;
 // 
 // ifStatement
-//     IF constExpr
-//   | IFE constExpr
-//   | IFB textItem
-//   | IFNB textItem
-//   | IFDEF id
-//   | IFNDEF id
-//   | IFDIF textItem , textItem
-//   | IFDIFI textItem , textItem
-//   | IFIDN textItem , textItem
-//   | IFIDNI textItem , textItem
-//   | IF1
-//   | IF2
+//     IF constExpr
+//   | IFE constExpr
+//   | IFB textItem
+//   | IFNB textItem
+//   | IFDEF id
+//   | IFNDEF id
+//   | IFDIF textItem , textItem
+//   | IFDIFI textItem , textItem
+//   | IFIDN textItem , textItem
+//   | IFIDNI textItem , textItem
+//   | IF1
+//   | IF2
  
 immExpr :
     expr
@@ -566,15 +575,15 @@ includeDir :
     ;
  
 // includeLibDir
-//   INCLUDELIB fileSpec ;;
+//   INCLUDELIB fileSpec ;;
  
 initValue :
       immExpr
     | string
     | QUESTION_MARK
     | constExpr DUP LPAREN scalarInstList RPAREN
-//   | floatNumber
-//   | bcdConst
+//   | floatNumber
+//   | bcdConst
     ;
  
 inSegDir :
@@ -591,13 +600,13 @@ inSegDirList :
 inSegmentDir : 
       instruction
     | dataDir
-//   | controlDir
-//   | startupDir
-//   | exitDir
-//   | offsetDir
-//   | labelDir
+//   | controlDir
+//   | startupDir
+//   | exitDir
+    | offsetDir
+//   | labelDir
     | procDir localDirList? inSegDirList? endpDir // ⟦ ⟧ ⟦ inSegDirList ⟧ endpDir
-//   | invokeDir
+//   | invokeDir
     | generalDir
     ;
 
@@ -610,21 +619,21 @@ instruction :
     ;
  
 // invokeArg
-//   register :: register
-//   | expr
-//   | ADDR expr
+//   register :: register
+//   | expr
+//   | ADDR expr
 // 
 // invokeDir
-//   INVOKE expr , ⟦ ⟦ ;; ⟧ invokeList ⟧;;
+//   INVOKE expr , ⟦ ⟦ ;; ⟧ invokeList ⟧;;
 // 
 // invokeList
-//   invokeArg | invokeList, ;; ⟦ ⟧ invokeArg
+//   invokeArg | invokeList, ;; ⟦ ⟧ invokeArg
 // 
 // keyword
-//   Jedes reservierte Wort.
+//   Jedes reservierte Wort.
 // 
 // keywordList
-//   keyword | keyword keywordList
+//   keyword | keyword keywordList
  
 labelDef :
       id COLON 
@@ -633,7 +642,7 @@ labelDef :
     ;
  
 // labelDir
-//   id LABEL qualifiedType ;;
+//   id LABEL qualifiedType ;;
  
 langType :
 //    C | 
@@ -641,21 +650,21 @@ langType :
     ;
     
 // listDir
-//   listOption ;;
+//   listOption ;;
 // 
 // listOption
-//   .LIST
-//   | .NOLIST
-//   | .XLIST
-//   | .LISTALL
-//   | .LISTIF
-//   | .LFCOND
-//   | .NOLISTIF
-//   | .SFCOND
-//   | .TFCOND
-//   | .LISTMACROALL | .LALL
-//   | .NOLISTMACRO | .SALL
-//   | .LISTMACRO | .XALL
+//   .LIST
+//   | .NOLIST
+//   | .XLIST
+//   | .LISTALL
+//   | .LISTIF
+//   | .LFCOND
+//   | .NOLISTIF
+//   | .SFCOND
+//   | .TFCOND
+//   | .LISTMACROALL | .LALL
+//   | .NOLISTMACRO | .SALL
+//   | .LISTMACRO | .XALL
  
 localDef :
     LOCAL idList // ;;
@@ -676,13 +685,13 @@ localList :
     ;
 
 macroArg :
-//   % constExpr
-//   | % textMacroId
-//   | % macroFuncId ( macroArgList )
-//   | 
+//   % constExpr
+//   | % textMacroId
+//   | % macroFuncId ( macroArgList )
+//   | 
     string
-//   | arbitraryText
-//   | < arbitraryText >
+//   | arbitraryText
+//   | < arbitraryText >
     ;
 
 macroArgList :
@@ -695,38 +704,38 @@ macroBody :
     ;
  
 // macroCall
-//   id macroArgList ;;
-//   | id ( macroArgList )
+//   id macroArgList ;;
+//   | id ( macroArgList )
  
 macroDir :
     id MACRO macroParmList? macroBody ENDM
     ;
  
 // macroFor
-//   forDir forParm , < macroArgList > ;;
-//   macroBody
-//   ENDM ;;
+//   forDir forParm , < macroArgList > ;;
+//   macroBody
+//   ENDM ;;
 // 
 // macroForc
-//   forcDir id , textLiteral ;;
-//   macroBody
-//   ENDM ;;
+//   forcDir id , textLiteral ;;
+//   macroBody
+//   ENDM ;;
 // 
 // macroFuncId
-//   id
+//   id
 // 
 // macroId
-//   macroProcId | macroFuncId
+//   macroProcId | macroFuncId
 // 
 // macroIdList
-//   macroId | macroIdList , macroId
+//   macroId | macroIdList , macroId
  
 macroLabel :
     id
     ;
  
 macroParm :
-    id COLON parmType // ⟦ ⟧
+    id ( COLON parmType )? // ⟦ ⟧
     ;
 
 macroParmList :
@@ -735,16 +744,18 @@ macroParmList :
     ;
 
 // macroProcId
-//   id
+//   id
 // 
 // macroRepeat
-//   repeatDir constExpr ;;
-//   macroBody
-//   ENDM ;;
+//   repeatDir constExpr ;;
+//   macroBody
+//   ENDM ;;
  
 macroStmt :
       directive
     | instruction
+    | segDir
+    | dataDir
     | exitmDir
     | COMMA macroLabel
     | GOTO macroLabel
@@ -756,12 +767,12 @@ macroStmtList :
     ;
  
 // macroWhile
-//   WHILE constExpr ;;
-//   macroBody
-//   ENDM ;;
+//   WHILE constExpr ;;
+//   macroBody
+//   ENDM ;;
 // 
 // mapType
-//   ALL | NONE | NOTPUBLIC
+//   ALL | NONE | NOTPUBLIC
  
 memOption :
     TINY | SMALL | MEDIUM | COMPACT | LARGE | HUGE | FLAT
@@ -813,79 +824,87 @@ mulOp :
     ;
  
 // nameDir
-//   NAME id ;;
+//   NAME id ;;
  
 nearfar :
     NEAR | FAR
     ;
 
 // nestedStruct
-//   structHdrid ⟦ ⟧;;
-//   structBody
-//   ENDS ;;
-// 
-// offsetDir
-//   offsetDirType ;;
-// 
-// offsetDirType
-//     EVEN
-//   | ORG immExpr
-//   | ALIGN constExpr ⟦ ⟧
-// 
-// offsetType
-//   GROUP | SEGMENT | FLAT
-// 
+//   structHdrid ⟦ ⟧;;
+//   structBody
+//   ENDS ;;
+ 
+offsetDir :
+    offsetDirType // ;;
+    ;
+
+offsetDirType :
+      EVEN
+    | ORG immExpr
+    | ALIGN constExpr? // ⟦ ⟧
+    ;
+ 
+offsetType :
+    GROUP | SEGMENT | FLAT
+    ;
+
 // oldRecordFieldList
-//   constExpr ⟦ ⟧ | oldRecordFieldList , ⟦ constExpr ⟧
-// 
-// optionDir
-//   OPTION optionList ;;
-// 
-// optionItem
-//   CASEMAP : mapType
-//   | DOTNAME | NODOTNAME
-//   | EMULATOR | NOEMULATOR
-//   | EPILOGUE : macroId
-//   | EXPR16 | EXPR32
-//   | LANGUAGE : langType
-//   | LJMP | NOLJMP
-//   | M510 | NOM510
-//   | NOKEYWORD : < keywordList >
-//   | NOSIGNEXTEND
-//   | OFFSET : offsetType
-//   | OLDMACROS | NOOLDMACROS
-//   | OLDSTRUCTS | NOOLDSTRUCTS
-//   | PROC : oVisibility
-//   | PROLOGUE : macroId
-//   | READONLY | NOREADONLY
-//   | SCOPED | NOSCOPED
-//   | SEGMENT : segSize
-//   | SETIF2 : bool
-// 
-// optionList
-//   optionItem | optionList, ;; ⟦ ⟧ optionItem
-// 
+//   constExpr ⟦ ⟧ | oldRecordFieldList , ⟦ constExpr ⟧
+
+optionDir :
+    OPTION optionList
+    ;
+
+optionItem :
+//   CASEMAP : mapType
+//   | DOTNAME | NODOTNAME
+//   | EMULATOR | NOEMULATOR
+//   | EPILOGUE : macroId
+//   | EXPR16 | EXPR32
+//   | LANGUAGE : langType
+//   | LJMP | NOLJMP
+//   | M510 | NOM510
+//   | NOKEYWORD : < keywordList >
+//   | NOSIGNEXTEND
+//   | 
+    OFFSET COLON offsetType
+//   | OLDMACROS | NOOLDMACROS
+//   | OLDSTRUCTS | NOOLDSTRUCTS
+//   | PROC : oVisibility
+//   | PROLOGUE : macroId
+//   | READONLY | NOREADONLY
+//   | SCOPED | NOSCOPED
+//   | SEGMENT : segSize
+//   | SETIF2 : bool
+    ;
+
+optionList :
+      optionItem 
+    | optionList COMMA optionItem
+    ;
+ 
 // optText
-//   , textItem
+//   , textItem
  
 orOp :
     OR | XOR
     ;
 
 // oVisibility
-//   PUBLIC | PRIVATE | EXPORT
+//   PUBLIC | PRIVATE | EXPORT
 // 
 // pageDir
-//   PAGEpageExpr ⟦ ⟧;;
+//   PAGEpageExpr ⟦ ⟧;;
 // 
 // pageExpr
-//   + | pageLength ⟦ ⟧ ⟦ , pageWidth ⟧
+//   + | pageLength ⟦ ⟧ ⟦ , pageWidth ⟧
 // 
 // pageLength
-//   constExpr
+//   constExpr
 // 
 // pageWidth
-//   constExpr
+//   constExpr
  
 parm :
       parmId COLON qualifiedType? // ⟦ ⟧
@@ -913,11 +932,11 @@ pOptions :
     ;
  
 // primary
-//   expr binaryOp expr | flagName | expr
+//   expr binaryOp expr | flagName | expr
  
 procDir :
     procId PROC pOptions? macroArgList? // ⟦ ⟧ ⟦ < macroArgList > ⟧
-//   usesRegs ⟦ ⟧ ⟦ procParmList ⟧
+//   usesRegs ⟦ ⟧ ⟦ procParmList ⟧
     ;
  
 processor :
@@ -942,41 +961,41 @@ procId :
     ;
  
 // procItem
-//   instrPrefix | dataDir | labelDir | offsetDir | generalDir
+//   instrPrefix | dataDir | labelDir | offsetDir | generalDir
 // 
 // procParmList
-//   , ⟦ ⟦ ;; ⟧ parmList ⟧
-//   , ⟦ ⟦ ;; ⟧ parmId :VARARG ⟧
+//   , ⟦ ⟦ ;; ⟧ parmList ⟧
+//   , ⟦ ⟦ ;; ⟧ parmId :VARARG ⟧
 // 
 // protoArg
-//   id ⟦ ⟧ : qualifiedType
+//   id ⟦ ⟧ : qualifiedType
 // 
 // protoArgList
-//   , ⟦ ⟦ ;; ⟧ protoList ⟧
-//   , ⟦ ⟦ ;; ⟧ ⟦ id ⟧ :VARARG ⟧
+//   , ⟦ ⟦ ;; ⟧ protoList ⟧
+//   , ⟦ ⟦ ;; ⟧ ⟦ id ⟧ :VARARG ⟧
 // 
 // protoList
-//   protoArg
-//   | protoList, ;; ⟦ ⟧protoArg
+//   protoArg
+//   | protoList, ;; ⟦ ⟧protoArg
 // 
 // protoSpec
-//   distance ⟦ ⟧ ⟦ langType ⟧ ⟦ protoArgList ⟧
-//   | typeId
+//   distance ⟦ ⟧ ⟦ langType ⟧ ⟦ protoArgList ⟧
+//   | typeId
 // 
 // protoTypeDir
-//   id PROTO protoSpec
+//   id PROTO protoSpec
 // 
 // pubDef
-//   langType ⟦ ⟧id
+//   langType ⟦ ⟧id
 // 
 // publicDir
-//   PUBLIC pubList ;;
+//   PUBLIC pubList ;;
 // 
 // pubList
-//   pubDef | pubList, ;; ⟦ ⟧pubDef
+//   pubDef | pubList, ;; ⟦ ⟧pubDef
 // 
 // purgeDir
-//   PURGE macroIdList
+//   PURGE macroIdList
  
 qualifiedType :
     type
@@ -985,43 +1004,43 @@ qualifiedType :
     ;
  
 // qualifier
-//   qualifiedType | PROTO protoSpec
+//   qualifiedType | PROTO protoSpec
  
 quote :
     DOUBLE_QUOTE | SINGLE_QUOTE
     ;
  
 // qwordRegister
-//   RAX | RCX | RDX | RBX | RSP | RBP | RSI | RDI
-//   | R8 | R9 | R10 | R11 | R12 | R13 | R14 | R15
+//   RAX | RCX | RDX | RBX | RSP | RBP | RSI | RDI
+//   | R8 | R9 | R10 | R11 | R12 | R13 | R14 | R15
 // 
 // radixDir
-//   .RADIX constExpr ;;
+//   .RADIX constExpr ;;
 // 
 // radixOverride
-//   h | o | q | t | y
-//   | H | O | Q | T | Y
+//   h | o | q | t | y
+//   | H | O | Q | T | Y
 // 
 // recordConst
-//   recordTag { oldRecordFieldList }
-//   | recordTag < oldRecordFieldList >
+//   recordTag { oldRecordFieldList }
+//   | recordTag < oldRecordFieldList >
 // 
 // recordDir
-//   recordTag RECORD bitDefList ;;
+//   recordTag RECORD bitDefList ;;
 // 
 // recordFieldList
-//   constExpr ⟦ ⟧ | recordFieldList , ⟦ ;; ⟧ ⟦ constExpr ⟧
+//   constExpr ⟦ ⟧ | recordFieldList , ⟦ ;; ⟧ ⟦ constExpr ⟧
 // 
 // recordInstance
-//   {;; ⟦ ⟧ recordFieldList ⟦ ;; ⟧}
-//   | < oldRecordFieldList >
-//   | constExpr DUP ( recordInstance )
+//   {;; ⟦ ⟧ recordFieldList ⟦ ;; ⟧}
+//   | < oldRecordFieldList >
+//   | constExpr DUP ( recordInstance )
 // 
 // recordInstList
-//   recordInstance | recordInstList, ;; ⟦ ⟧recordInstance
+//   recordInstance | recordInstList, ;; ⟦ ⟧recordInstance
 // 
 // recordTag
-//   id
+//   id
 
 register :
 //      specialRegister 
@@ -1044,11 +1063,11 @@ relOp :
     ;
 
 // repeatBlock
-//   .REPEAT ;;
-//   blockStatements ;;untilDir ;;
+//   .REPEAT ;;
+//   blockStatements ;;untilDir ;;
 // 
 // repeatDir
-//   REPEAT | REPT
+//   REPEAT | REPT
 
 scalarInstList :
       initValue
@@ -1057,19 +1076,20 @@ scalarInstList :
 
 // 
 // segAlign
-//   BYTE | WORD | DWORD | PARA | PAGE
+//   BYTE | WORD | DWORD | PARA | PAGE
 // 
 // segAttrib
-//   PUBLIC | STACK | COMMON | MEMORY | AT constExpr | PRIVATE
+//   PUBLIC | STACK | COMMON | MEMORY | AT constExpr | PRIVATE
  
 segDir :
-    DOT_CODE segId? // ⟦ ⟧
-    | DOT_DATA
-//   | .DATA?
-//   | .CONST
-//   | .FARDATA segId? // ⟦ ⟧
-//   | .FARDATA? segId? // ⟦ ⟧
-//   | 
+      DOT_CODE segId? // ⟦ ⟧
+    | DOT_DATA 
+    | UNDERSCORE_DATA ( segId | SEGMENT )
+//   | .DATA?
+//   | .CONST
+//   | .FARDATA segId? // ⟦ ⟧
+//   | .FARDATA? segId? // ⟦ ⟧
+//   | 
     | DOT_STACK constExpr? // ⟦ ⟧
     ;
  
@@ -1078,78 +1098,78 @@ segId :
     ;
  
 // segIdList
-//   segId
-//   | segIdList , segId
+//   segId
+//   | segIdList , segId
 // 
 // segmentDef
-//   segmentDirinSegDirList ⟦ ⟧ endsDirsimpleSegDir | ⟦ inSegDirList ⟧ ⟦ ⟧ endsDir
+//   segmentDirinSegDirList ⟦ ⟧ endsDirsimpleSegDir | ⟦ inSegDirList ⟧ ⟦ ⟧ endsDir
 // 
 // segmentDir
-//   segIdSEGMENT segOptionList ⟦ ⟧;;
+//   segIdSEGMENT segOptionList ⟦ ⟧;;
 // 
 // segmentRegister
-//   CS | DS | ES | FS | GS | SS
+//   CS | DS | ES | FS | GS | SS
 // 
 // segOption
-//   segAlign
-//   | segRO
-//   | segAttrib
-//   | segSize
-//   | className
+//   segAlign
+//   | segRO
+//   | segAttrib
+//   | segSize
+//   | className
 // 
 // segOptionList
-//   segOption | segOptionList segOption
+//   segOption | segOptionList segOption
 // 
 // segOrderDir
-//   .ALPHA | .SEQ | .DOSSEG | DOSSEG
+//   .ALPHA | .SEQ | .DOSSEG | DOSSEG
 // 
 // segRO
-//   READONLY
+//   READONLY
 // 
 // segSize
-//   USE16 | USE32 | FLAT
+//   USE16 | USE32 | FLAT
  
 shiftOp :
     SHR | SHL
     ;
  
 // sign
-//   + | -
+//   + | -
 // 
 // simdRegister
-//   MM0 | MM1 | MM2 | MM3 | MM4 | MM5 | MM6 | MM7
-//   | xmmRegister
-//   | YMM0 | YMM1 | YMM2 | YMM3 | YMM4 | YMM5 | YMM6 | YMM7
-//   | YMM8 | YMM9 | YMM10 | YMM11 | YMM12 | YMM13 | YMM14 | YMM15
+//   MM0 | MM1 | MM2 | MM3 | MM4 | MM5 | MM6 | MM7
+//   | xmmRegister
+//   | YMM0 | YMM1 | YMM2 | YMM3 | YMM4 | YMM5 | YMM6 | YMM7
+//   | YMM8 | YMM9 | YMM10 | YMM11 | YMM12 | YMM13 | YMM14 | YMM15
 // 
 // simpleExpr
-//   ( cExpr ) | primary
+//   ( cExpr ) | primary
  
  simpleSegDir :
     segDir //;;
     ;
  
 // sizeArg
-//   id | type | e10
+//   id | type | e10
 // 
 // specialChars
-//   : | . | [ | ] | ( | ) | < | > | { | }
-//   | + | - | / | * | & | % | !
-//   | ' | \ | = | ; | , | "
-//   | whiteSpaceCharacter
-//   | endOfLine
+//   : | . | [ | ] | ( | ) | < | > | { | }
+//   | + | - | / | * | & | % | !
+//   | ' | \ | = | ; | , | "
+//   | whiteSpaceCharacter
+//   | endOfLine
 // 
 // specialRegister
-//   CR0 | CR2 | CR3
-//   | DR0 | DR1 | DR2 | DR3 | DR6 | DR7
-//   | TR3 | TR4 | TR5 | TR6 | TR7
+//   CR0 | CR2 | CR3
+//   | DR0 | DR1 | DR2 | DR3 | DR6 | DR7
+//   | TR3 | TR4 | TR5 | TR6 | TR7
  
 stackOption :
     NEARSTACK | FARSTACK
     ;
  
 // startupDir
-//   .STARTUP ;;
+//   .STARTUP ;;
 
 //stext :
 //    stringChar | stext stringChar
@@ -1162,46 +1182,46 @@ string :
     ;
  
 // stringChar
-//   quote quote | Ein beliebiges Zeichen mit Ausnahme von Anführungszeichen.
+//   quote quote | Ein beliebiges Zeichen mit Ausnahme von Anführungszeichen.
 // 
 // structBody
-//   structItem ;;
-//   | structBody structItem ;;
+//   structItem ;;
+//   | structBody structItem ;;
 // 
 // structDir
-//   structTagstructHdr fieldAlign ⟦ ⟧
-//   , NONUNIQUE ⟦ ⟧;;
-//   structBody
-//   structTag ENDS ;;
+//   structTagstructHdr fieldAlign ⟦ ⟧
+//   , NONUNIQUE ⟦ ⟧;;
+//   structBody
+//   structTag ENDS ;;
 // 
 // structHdr
-//   STRUC | STRUCT | UNION
+//   STRUC | STRUCT | UNION
 // 
 // structInstance
-//   <fieldInitList ⟦ ⟧>
-//   | {;; ⟦ ⟧ ⟦ fieldInitList ⟧ ⟦ ;; ⟧}
-//   | constExprDUP ( structInstList )
+//   <fieldInitList ⟦ ⟧>
+//   | {;; ⟦ ⟧ ⟦ fieldInitList ⟧ ⟦ ;; ⟧}
+//   | constExprDUP ( structInstList )
 // 
 // structInstList
-//   structInstance | structInstList, ;; ⟦ ⟧structInstance
+//   structInstance | structInstList, ;; ⟦ ⟧structInstance
 // 
 // structItem
-//   dataDir
-//   | generalDir
-//   | offsetDir
-//   | nestedStruct
+//   dataDir
+//   | generalDir
+//   | offsetDir
+//   | nestedStruct
 // 
 // structTag
-//   id
+//   id
 // 
 // term
-//   simpleExpr | ! simpleExpr
+//   simpleExpr | ! simpleExpr
 // 
 // text
-//   textLiteral | text character | ! character text | character | ! character
+//   textLiteral | text character | ! character text | character | ! character
 // 
 // textDir
-//   id textMacroDir ;;
+//   id textMacroDir ;;
  
 textItem :
       textLiteral 
@@ -1210,29 +1230,29 @@ textItem :
     ;
 
 // textLen
-//   constExpr
+//   constExpr
 // 
 // textList
-//   textItem | textList, ;; ⟦ ⟧textItem
+//   textItem | textList, ;; ⟦ ⟧textItem
  
 textLiteral :
-//   < text > ;;
+//   < text > ;;
     IDENTIFIER
     ;
  
 // textMacroDir
-//   CATSTRtextList ⟦ ⟧
-//   | TEXTEQUtextList ⟦ ⟧
-//   | SIZESTR textItem
-//   | SUBSTRtextItem , textStart , textLen ⟦ ⟧
-//   | INSTRtextStart , ⟦ ⟧ textItem , textItem
+//   CATSTRtextList ⟦ ⟧
+//   | TEXTEQUtextList ⟦ ⟧
+//   | SIZESTR textItem
+//   | SUBSTRtextItem , textStart , textLen ⟦ ⟧
+//   | INSTRtextStart , ⟦ ⟧ textItem , textItem
  
 textMacroId :
     id
     ;
  
 // textStart
-//   constExpr
+//   constExpr
 
 titleDir :
     titleType ( LPAREN | RPAREN | IDENTIFIER )* // arbitraryText ;;
@@ -1243,39 +1263,39 @@ titleType :
     ;
 
 type :
-//   structTag
-//   | unionTag
-//   | recordTag
-//   | distance
+//   structTag
+//   | unionTag
+//   | recordTag
+//   | distance
     dataType
     | typeId
 ;
 
 // typedefDir
-//   typeId TYPEDEF qualifier
+//   typeId TYPEDEF qualifier
  
 typeId :
     id
     ;
  
 // unionTag
-//   id
+//   id
 // 
 // untilDir
-//   .UNTIL cExpr ;;
-//   .UNTILCXZcxzExpr ⟦ ⟧;;
+//   .UNTIL cExpr ;;
+//   .UNTILCXZcxzExpr ⟦ ⟧;;
 // 
 // usesRegs
-//   USES regList
+//   USES regList
 // 
 // whileBlock
-//   .WHILE cExpr ;;
-//   blockStatements ;;
-//   .ENDW
+//   .WHILE cExpr ;;
+//   blockStatements ;;
+//   .ENDW
 // 
 // whiteSpaceCharacter
-//   ASCII 8, 9, 11–13, 26, 32
+//   ASCII 8, 9, 11–13, 26, 32
 // 
 // xmmRegister
-//   XMM0 | XMM1 | XMM2 | XMM3 | XMM4 | XMM5 | XMM6 | XMM7
-//   | XMM8 | XMM9 | XMM10 | XMM11 | XMM12 | XMM13 | XMM14 | XMM15
+//   XMM0 | XMM1 | XMM2 | XMM3 | XMM4 | XMM5 | XMM6 | XMM7
+//   | XMM8 | XMM9 | XMM10 | XMM11 | XMM12 | XMM13 | XMM14 | XMM15

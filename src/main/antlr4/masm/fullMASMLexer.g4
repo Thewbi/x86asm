@@ -11,6 +11,19 @@ COMMENT :
     ';' ( ~'\n' )* -> channel(HIDDEN)
     ;
 
+HASHTAG_COMMENT :
+    '#' ( ~'\n' )* -> channel(HIDDEN)
+    ;
+
+SLASHSLASH_COMMENT :
+    '/''/' ( ~'\n' )* -> channel(HIDDEN)
+    ;
+
+// I do not know what COMM is. It is output by MSVC. Use godbolt
+COMM : 
+    'C''O''M''M' (~[\r\n])* -> channel(HIDDEN)
+    ;
+
 BLOCK_COMMENT
     : '/*' .*? '*/' -> skip
     ;
@@ -98,6 +111,10 @@ DIV : D I V ;
 
 EXIT : E X I T ;
 
+FLAT : 'F''L''A''T' ;
+
+GROUP : 'G''R''O''U''P' ;
+
 INC : I N C ;
 
 JE : J E ;
@@ -118,6 +135,7 @@ PUSH : P U S H ;
 RET : R E T ;
 
 SUB : S U B ;
+SEGMENT : 'S''E''G''M''E''N''T' ;
 
 // keywords
 
@@ -144,6 +162,8 @@ BIN_NUMERIC : '%' [0-1]+ ;
 DEC_NUMERIC : '-'? [0-9]+ ;
 HEX_NUMERIC : '$' [a-fA-F0-9]+ ;
 
+ALIGN : 'A''L''I''G''N' ;
+
 BYTE : 'B' 'Y' 'T' 'E' ;
 
 COLON : ':' ;
@@ -151,6 +171,12 @@ COMMA : ',' ;
 
 // DIGITS_RADIX_OVERRIDE : '-'? [0-9]+ ;
 
+DB : D B ;
+DW : D W ;
+DD : D D ;
+DF : D F ;
+DQ : D Q ;
+DT : D T ;
 DOT : '.' ;
 
 DOT_386     : '.''3''8''6' ;
@@ -165,6 +191,7 @@ DOT_387     : '.''3''8''7' ;
 
 DOT_CODE    : DOT 'c' 'o' 'd' 'e' ;
 DOT_DATA    : DOT 'd' 'a' 't' 'a' ;
+UNDERSCORE_DATA    : UNDERSCORE D A T A ;
 DOT_MODEL   : DOT 'm' 'o' 'd' 'e' 'l' ;
 DOT_STACK   : DOT 's' 't' 'a' 'c' 'k' ;
 
@@ -181,16 +208,18 @@ MEDIUM : M E D I U M ;
 COMPACT : C O M P A C T ;
 LARGE : L A R G E ;
 HUGE : H U G E ;
-FLAT : F L A T ;
+//FLAT : F L A T ;
 
+DOLLAR_SIGN : '$' ;
 DUP : 'D''U''P' ;
-
 DWORD : 'D''W''O''R''D' ;
 
 ENDP : 'E''N''D''P' ;
 ENDM : 'E''N''D''M' ;
 END : 'E''N''D' ;
 EQU : 'E''Q''U' ;
+EQUALS_SIGN : '=' ;
+EVEN : 'E''V''E''N' ;
 EXITM : 'E''X''I''T''M' ;
 
 FAR : 'F''A''R' ;
@@ -221,6 +250,8 @@ NOT : 'N' 'O' 'T' ;
 
 OWORD : 'O''W''O''R''D' ;
 OFFSET : 'O''F''F''S''E''T' ;
+OPTION : 'O''P''T''I''O''N' ;
+ORG : 'O''R''G' ;
 
 PERCENT_SIGN : '%' ;
 PLUS : '+' ;
@@ -252,11 +283,12 @@ SUBTTL : S U B T T L ;
 SWORD : 'S''W''O''R''D' ;
 SQWORD : 'S''Q''W''O''R''D' ;
 SINGLE_QUOTE : '\'';
- 
 
 TBYTE : 'T''B''Y''T''E' ;
 //TITLE : T I T L E -> pushMode(TITLEMODE) ;
 TITLE : T I T L E ;
+
+UNDERSCORE : '_' ;
 
 VARARG : 'V''A''R''A''R''G' ;
 
@@ -276,7 +308,15 @@ YMMWORD : 'Y''M''M''W''O''R''D' ;
 
 
 
-IDENTIFIER : ( ('@')? DOT? ('_')* [_0-9a-zA-Z]* [a-zA-Z]+ ) ( DOT? ('_')* [_0-9a-zA-Z]+ )* ;
+//IDENTIFIER : ( ('$')? ('@')? DOT? ('_')* [_0-9a-zA-Z]* [a-zA-Z]+ ) ( ('$')? DOT? ('_')* [_0-9a-zA-Z]* )+ ;
+// $SG9919
+// n$
+// reversed$
+// dataRequest
+// $LN2@main
+// $LN7
+IDENTIFIER : ( ('$') | ('@') | DOT | ('_') )? ( ('$') | ('@') | DOT | [_0-9a-zA-Z] )+
+    ;
 
 WS : [ \t\r]+ -> skip ;
 
