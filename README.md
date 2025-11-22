@@ -241,15 +241,18 @@ In order to decode an instruction, the first byte is checked to find the encodin
 that matches.
 
 For 0xB8 this falls in the range of the encoding scheme *MOV r16, imm16*.
-This means, the instruction that the decoder has to output, is *MOV r16, imm16*
-The decode knows the Mnemonic *MOV* already at this point. The parameters are next.
+This means, the instruction that the decoder has to output, is *MOV r16, imm16*.
+The decoder knows the mnemonic *MOV* already at this point. The parameters are next.
 
-Internally the decoder has to have knowledge about how encoding was performed.
+Internally the decoder has to have knowledge about how encoding was performed. It basically
+has to store all encoding rules either as a data structure or hard-coded for each
+mnemonic in source code.
 
-The encoding rule for *MOV r16, imm16* is *(B8 + rw) iw*
+The encoding rule for *MOV r16, imm16* is *(B8 + rw) iw*. The decoder will perform the
+inverse operation to the encoder. It will apply the encoding rule in reverse.
 
-The first parameter is the register. Subtract 0xB8, the base code for MOV, from
-the first byte and receive *0x00* which resolves to AX using the register id table.
+The first parameter is the destination register. Subtract 0xB8, which is the base code 
+for MOV, from the first byte to receive *0x00* which resolves to AX using the register id table.
 
 The second (and last) parameter is a *imm16* value in stored in little endian format. 
 *imm16* means a 16 bit constant (immediate) which is a word which are two bytes. 
@@ -261,3 +264,21 @@ The instruction that the encoder will hand over to the CPU data path is
 ```
 MOV ax, 3
 ```
+
+Conglaturations again, you have just decoded your first 8086 instruction! More power to you!
+
+Maybe continue with the 8086/8088 ADD instruction!
+
+The ADD instruntion has a different, more complex encoding rule.
+
+# Encoding ADD
+
+```
+ADD cl, al  -->  00 C1  or  02 C8
+```
+
+*ADD cl, al* has in fact two possible encodings! emu8086 produces *02 C8*
+and https://www.c-jump.com/CIS77/CPU/x86/lecture.html#X77_0010_real_encoding explains *00 C1*
+in detail and mentions the existence of *02 C8*
+
+This section follows the article above and details the *00 C1* encoding.
