@@ -70,6 +70,9 @@ main    ENDP
 
 
 // Source: https://www.programiz.com/c-programming/examples/palindrome-number
+// Usage:
+// Enter an integer: 1001
+// 1001 is a palindrome.
 // 
 // include <stdio.h>
 // nt main() {

@@ -589,7 +589,7 @@ initValue :
 inSegDir :
       labelDef
     | inSegmentDir
-    | labelDef inSegmentDir
+//    | labelDef inSegmentDir
     ;
  
 inSegDirList :
